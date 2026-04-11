@@ -336,6 +336,16 @@ img {
 .chat-messages {
   flex-grow: 1;
   overflow-y: auto; /* Sirf messages scroll honge, puri screen nahi */
+  /* User ko galti se zoom karne se rokne ke liye */
+html, body {
+  touch-action: pan-x pan-y; /* Scroll hoga par pinch-zoom nahi */
+  overscroll-behavior: none; /* Pull-to-refresh jaisi cheezein control karne ke liye */
+}
+
+/* Taaki mobile keyboard khulne par layout na bigde */
+input {
+  font-size: 16px !important; 
+}
 }
 html {
   box-sizing: border-box;
