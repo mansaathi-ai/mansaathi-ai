@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ManSaathi Chat</title>
+
+<style>
+
+body{
+margin:0;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+font-family:Arial;
+color:white;
+display:flex;
+flex-direction:column;
+height:100vh;
+}
+
+/* HEADER */
+
+.header{
+position:relative;
+text-align:center;
+padding-top:60px;
+}
+
+/* BACK BUTTON */
+
+.backBtn{
+
+position:absolute;
+left:20px;
+top:25px;
+
+display:flex;
+align-items:center;
+gap:6px;
+
+padding:8px 14px;
+
+border-radius:20px;
+border:none;
+
+background:#1e293b;
+color:white;
+
+font-size:14px;
+
+cursor:pointer;
+
+transition:0.25s;
+
+}
+
+.backBtn:hover{
+
+background:#334155;
+transform:scale(1.05);
+
+}
+
+/* TITLE */
+
+.title{
+font-size:32px;
+font-weight:700;
+letter-spacing:1px;
+text-align:center;
+
+background: linear-gradient(90deg,#6ee7d6,#22d3ee,#6ee7d6);
+background-size:200%;
+
+-webkit-background-clip:text;
+background-clip:text;
+-webkit-text-fill-color:transparent;
+
+animation: glowMove 5s linear infinite;
+}
+
+.subtitle{
+opacity:0.75;
+font-size:14px;
+margin-top:6px;
+}
+@keyframes glowMove{
+0%{
+background-position:0%;
+}
+
+100%{
+background-position:200%;
+}
+}
+/* CHAT AREA */
+
+.chatArea{
+
+flex:1;
+overflow-y:auto;
+
+display:flex;
+flex-direction:column;
+
+gap:14px;
+
+max-width:700px;
+margin:auto;
+
+padding:100px 20px 30px 20px;
+
+width:100%;
+box-sizing:border-box;
+
+scrollbar-width:none;
+
+}
+
+.chatArea::-webkit-scrollbar{
+display:none;
+}
+
+/* MESSAGE */
+
+.aiMsg,
+.userMsg{
+
+padding:12px 16px;
+max-width: 55%;
+
+line-height:1.4;
+
+word-wrap:break-word;
+
+font-size:16px;
+
+animation:fadeUp 0.25s ease;
+
+}
+
+/* AI */
+
+.aiMsg{
+
+background:#2c3e50;
+
+border-radius:16px 16px 16px 6px;
+
+align-self:flex-start;
+
+}
+
+/* USER */
+
+.userMsg{
+
+background:#6ee7d6;
+
+color:black;
+
+border-radius:16px 16px 6px 16px;
+
+align-self:flex-end;
+
+}
+
+/* INPUT AREA */
+
+.inputContainer{
+
+padding:20px;
+
+max-width:700px;
+
+margin:auto;
+
+width:100%;
+
+display:flex;
+
+}
+
+/* OUTER BORDER */
+
+.chatBox{
+
+width:100%;
+
+padding:3px;
+
+border-radius:30px;
+
+background:linear-gradient(
+90deg,
+#00f5ff,
+#00ff9d,
+#ffd000,
+#ff00ea,
+#00f5ff
+);
+
+background-size:400%;
+
+animation:borderMove 7s linear infinite;
+
+}
+
+/* INNER INPUT */
+
+.inputArea{
+
+width:100%;
+
+background:#1e293b;
+
+border-radius:28px;
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+padding:14px 18px;
+
+box-sizing:border-box;
+
+}
+
+/* TEXTAREA */
+
+textarea{
+
+flex:1;
+
+background:transparent;
+border:none;
+
+outline:none;
+
+color:white;
+
+font-size:16px;
+
+resize:none;
+
+min-height:24px;
+max-height:120px;
+
+line-height:1.4;
+
+overflow-y:auto;
+
+scrollbar-width:none;
+
+}
+
+textarea::-webkit-scrollbar{
+display:none;
+}
+
+/* SEND BUTTON */
+
+.sendBtn{
+
+width:38px;
+height:38px;
+
+border-radius:50%;
+border:none;
+
+background:#22d3ee;
+
+color:black;
+
+font-size:18px;
+
+cursor:pointer;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+}
+
+/* ANIMATIONS */
+
+@keyframes borderMove{
+0%{background-position:0%}
+100%{background-position:400%}
+}
+
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(10px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+@keyframes shine{
+
+0%{background-position:0%}
+
+100%{background-position:200%}
+
+}
+
+</style>
+
+</head>
+
+<style>
+  .userMsg {
+  font-size: 15px;
+  font-weight: 500;      /* हल्का bold = clean */
+  letter-spacing: 0.2px; /* spacing */
+  line-height: 1.5;      /* readable */
+}
+.newChatBtn{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  padding: 12px 18px;
+  border-radius: 50px;
+  border: none;
+
+  background: black;
+  color: white;
+  font-weight: bold;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+#scrollBtn {
+  position: fixed;
+  bottom: 120px;
+
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  font-size: 18px;
+}
+
+#badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+
+  background: #22c55e;
+  color: #000;
+
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+
+  display: none;
+}
+</style>
+<body>
+<div id="scrollBtn">
+  ↓
+  <span id="badge">0</span>
+</div>
+
+<div class="header">
+
+<button class="backBtn" onclick="window.location.href='index.html'">← Back</button>
+<button class="newChatBtn" onclick="newChat()">＋ New</button>
+
+<div class="title">ManSaathi</div>
+
+<div class="subtitle" id="subtitle">
+
+</div>
+
+</div>
+
+<div class="chatArea" id="chatArea">
+
+</div>
+
+</div>
+
+<div class="inputContainer">
+
+<div class="chatBox">
+
+<div class="inputArea">
+
+<textarea id="userInput" placeholder="Type your message..."Spellcheck = "false"></textarea>
+
+
+<button class="sendBtn" onclick="sendMessage()">➤</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>const texts = [
+"Share what you feel. I'm here to listen.",
+"A safe space for your thoughts.",
+"Talk about your mood and feelings.",
+"You are not alone here.",
+"Say anything that's on your mind."
+];
+
+let textIndex = 0;
+let charIndex = 0;
+
+function typeText(){
+
+if(charIndex < texts[textIndex].length){
+
+document.getElementById("subtitle").innerHTML += texts[textIndex].charAt(charIndex);
+
+charIndex++;
+
+setTimeout(typeText,50);
+
+}else{
+
+setTimeout(()=>{
+document.getElementById("subtitle").innerHTML="";
+charIndex=0;
+textIndex=(textIndex+1)%texts.length;
+typeText();
+},2000);
+
+}
+
+}
+
+typeText();
+
+let textarea=document.getElementById("userInput");
+
+/* auto grow */
+
+textarea.addEventListener("input", ()=>{
+
+textarea.style.height="auto";
+textarea.style.height=textarea.scrollHeight+"px";
+
+});
+
+/* Enter send */
+
+textarea.addEventListener("keypress", function(e){
+
+if(e.key==="Enter" && !e.shiftKey){
+
+e.preventDefault();
+sendMessage();
+
+}
+
+});
+
+function sendMessage(){
+
+let text=textarea.value.trim();
+
+if(text==="") return;
+
+let chat=document.getElementById("chatArea");
+
+/* USER */
+
+let user=document.createElement("div");
+
+user.className="userMsg";
+
+user.innerText=text;
+
+chat.appendChild(user);
+
+/* AI typing */
+
+let typing=document.createElement("div");
+
+typing.className="aiMsg";
+
+typing.innerText="Typing...";
+
+chat.appendChild(typing);
+
+textarea.value="";
+
+chat.scrollTop=chat.scrollHeight;
+
+setTimeout(()=>{
+
+typing.remove();
+
+let ai=document.createElement("div");
+
+ai.className="aiMsg";
+
+ai.innerText="Main samajh raha hoon… agar chaho to aur share kar sakte ho.";
+
+chat.appendChild(ai);
+
+chat.scrollTop=chat.scrollHeight;
+
+},1200);
+
+}
+function goBack(){
+  localStorage.setItem("lastScreen","mood"); // 👈 IMPORTANT
+  window.location.href = "index.html";
+}
+
+// 📌 Current chat type
+const chatType = sessionStorage.getItem("chatType") || "default";
+
+// 📌 Chat config (tera pehle wala)
+const chatConfig = {
+  happy_fun: { firstMessage: "Hey 😄 aaj thoda fun karte hain. Tum kya dekhna ya baat karna chahte ho?" },
+  happy_affirm: { firstMessage: "Aaj positivity ko aur strong banate hain ✨ ek achchi si baat share karo." },
+  happy_energy: { firstMessage: "Awesome ⚡ chalo aaj energy ko action me badalte hain. Kya karna chahte ho?" },
+  happy_music: { firstMessage: "Nice 🎵 aaj ka mood musical hai. Tumhe kis type ka music pasand hai?" },
+
+  sad_relax: { firstMessage: "Main yaha hoon 🤍 pehle aaram se saans lo. Kya tum thoda share karna chahoge?" },
+  sad_healing: { firstMessage: "Koi baat nahi, aaram se bolo 🌿 jo feel ho raha hai, main sun raha hoon." },
+  sad_calm: { firstMessage: "Chalo thoda calm hote hain 🎶 tumhe abhi sabse zyada kis cheez ki zarurat lag rahi hai?" },
+  sad_quotes: { firstMessage: "Kabhi kabhi ek achchi line bhi dil ko halka kar deti hai 📝 tum kya feel kar rahe ho?" },
+
+  love_quotes: { firstMessage: "Love is in the air ❤️ kya tum romantic quotes chahte ho ya kisi special ke liye message?" },
+  love_guidance: { firstMessage: "Chalo relationship ko better banane ki baat karte hain 🤝 kya confusion hai?" },
+  love_confidence: { firstMessage: "Confidence attractive hoti hai 🔥 tum kis situation me confident banna chahte ho?" },
+  love_motivation: { firstMessage: "Dil ko halka aur strong dono rakhte hain 😊 aaj tumhe kis type ki positivity chahiye?" },
+
+  breakup_healing: { firstMessage: "Heartbreak tough hota hai 💔 lekin tum akela nahi ho. Jo feel ho raha hai bata sakte ho." },
+  breakup_moveon: { firstMessage: "Aaj ek step aage badhte hain 🌸 chhota hi sahi. Sabse zyada kis baat se hurt ho?" },
+  breakup_growth: { firstMessage: "Pain ko growth me badalna possible hai 🌱 chalo dheere dheere start karte hain." },
+  breakup_mindset: { firstMessage: "Tum soch se zyada strong ho 🧠 chalo mind ko stable banate hain." },
+
+  motivation_daily: { firstMessage: "Let's go 🚀 aaj ka target kya hai?" },
+  motivation_study: { firstMessage: "Focus mode on 🎯 aaj kis subject ya kaam par dhyan dena hai?" },
+  motivation_success: { firstMessage: "Badi growth chhote disciplined steps se aati hai 📈 tumhara goal kya hai?" },
+  motivational_mental: { firstMessage: "Strong mind, stable life 🧘 aaj tum apne aap ko kaise better banana chahte ho?" },
+
+  auto_mood: { firstMessage: "Bas normal baat karo 🤖 main tumhare mood ko samajhne ki koshish karunga." },
+  free_chat: { firstMessage: "Jo dil me hai woh bolo 💬 main yaha hoon." }
+};
+
+// 📌 Chat area
+const chatArea = document.getElementById("chatArea");
+
+// 📌 Load previous messages from sessionStorage
+let chatHistoryKey = `chatHistory_${chatType}`;
+let history = JSON.parse(localStorage.getItem(chatHistoryKey)) || [];
+
+// Render previous messages
+history.forEach(msg => {
+  let div = document.createElement("div");
+  div.className = msg.type === "user" ? "userMsg" : "aiMsg";
+  div.innerText = msg.text;
+  chatArea.appendChild(div);
+});
+
+// First AI message if no previous messages
+if(history.length === 0){
+  const firstMsg = chatConfig[chatType]?.firstMessage || "Hey 👋 main yaha hoon. Aaj tum kaise feel kar rahe ho?";
+  chatArea.innerHTML = `<div class="aiMsg">${firstMsg}</div>`;
+  history.push({type:"ai", text:firstMsg});
+  sessionStorage.setItem(chatHistoryKey, JSON.stringify(history));
+}
+
+// Send Message Function
+function sendMessage() {
+  const textarea = document.getElementById("userInput");
+  const text = textarea.value.trim();
+  if(text==="") return;function sendMessage(){
+  const userText = input.value.trim();
+  if(!userText) return;
+
+  // 1️⃣ Show user message
+  const userDiv = document.createElement("div");
+  userDiv.className = "userMsg";
+  userDiv.innerText = userText;
+  chatArea.appendChild(userDiv);
+
+  // 2️⃣ Save user message only once
+  
+
+history.push({type:"user", text:userText, });
+localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+
+  input.value = "";
+
+  // 3️⃣ Call AI reply
+  aiReply(); 
+}
+
+  // Add user message
+const userDiv = document.createElement("div");
+userDiv.className = "userMsg";
+
+
+
+history.push({type:"user", text, });
+
+userDiv.innerHTML = text;
+
+chatArea.appendChild(userDiv);
+
+
+
+  textarea.value = "";
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+  // Simulate AI reply
+  const typingDiv = document.createElement("div");
+  typingDiv.className = "aiMsg";
+  typingDiv.innerText = "Typing...";
+  chatArea.appendChild(typingDiv);
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+  setTimeout(()=>{
+
+  typingDiv.remove();
+
+  const aiText = "Main samajh raha hoon… aur share kar sakte ho.";
+
+  const aiDiv = document.createElement("div");
+  aiDiv.className = "aiMsg";
+
+  
+
+  aiDiv.innerHTML = `
+    <div style="display:flex;justify-content:space-between;">
+      <span>${aiText}</span>
+      
+    </div>
+  `;
+
+  chatArea.appendChild(aiDiv);
+
+  // 💥 MOST IMPORTANT
+  history.push({type:"ai", text: aiText, });
+
+  localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+},1200);
+}
+
+// Button & Enter key
+document.querySelector(".sendBtn").onclick = sendMessage;
+document.getElementById("userInput").addEventListener("keypress", function(e){
+  if(e.key==="Enter" && !e.shiftKey){
+    e.preventDefault();
+    sendMessage();
+  }
+});
+function newChat(){
+
+if(confirm("New chat start karni hai?")){
+
+let chatType = sessionStorage.getItem("chatType") || "default";
+let key = "chatHistory_" + chatType;
+
+// purani chat delete
+localStorage.removeItem(key);
+
+// page reload = new chat
+location.reload();
+
+}
+
+}
+const scrollBtn = document.getElementById("scrollBtn");
+
+chatArea.addEventListener("scroll", () => {
+
+  const distance = chatArea.scrollHeight - chatArea.scrollTop - chatArea.clientHeight;
+
+  if (distance > 100) {
+    scrollBtn.style.display = "flex";
+  } else {
+    scrollBtn.style.display = "none";
+  }
+
+});
+
+scrollBtn.onclick = () => {
+  chatArea.scrollTo({
+    top: chatArea.scrollHeight,
+    behavior: "smooth"
+  });
+};
+
+</script>
+
+</body>
+
+</html>
