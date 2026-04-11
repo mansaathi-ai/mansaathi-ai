@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ManSaathi AI</title>
+<style>
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;font-family: Arial, sans-serif;}
+
+/* BODY & BACKGROUND */
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  color:white;
+  overflow-x:hidden;
+}
+
+/* FLOATING EMOJIS */
+.floating-container{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+.floating-emoji{
+  position:absolute;
+  bottom:-50px;
+  font-size:28px;
+  opacity:0.35;
+  animation:floatUp linear infinite;
+}
+@keyframes floatUp{0%{transform:translateY(0); opacity:0.35;}100%{transform:translateY(-100vh); opacity:0;}}
+
+/* SCREEN CONTAINER */
+.screen{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  z-index:1;
+  transition:0.5s;
+}
+.hidden{display:none;}
+
+/* WELCOME SCREEN */
+.title{font-size:64px;font-weight:bold;color:#4fd1c5;margin-bottom:10px;}
+.subtitle{font-size:18px;color:#cbd5e0;margin-bottom:30px;}
+.start-btn{
+  background:#4fd1c5;color:#0f2027;border:none;
+  padding:14px 32px;font-size:18px;border-radius:10px;
+  cursor:pointer;transition:0.3s;
+}
+.start-btn:hover{background:#38b2ac;transform:scale(1.05);}
+
+/* MOOD SELECTION SCREEN */
+.mood-container{display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;width:90%;max-width:360px;}
+.mood-heading{font-size:32px;font-weight:bold;color:#4fd1c5;margin-bottom:5px;}
+.mood-subtitle{font-weight:500;font-size:14px;color:#cbd5e0;margin-bottom:20px;}
+.mood-btn{width:100%;padding:16px 0;margin:8px 0;font-size:18px;font-weight:bold;border:none;border-radius:12px;cursor:pointer;transition:0.3s;color:#0f2027;}
+.happy{background:#FFE066;}
+.sad{background:#6EC1E4;}
+.love{background:#FF8FB1;}
+.breakup{background:#FFABAB;}
+.motivational{background:#32CD32;}
+.auto{background:#FFD966;}
+.mood-btn:hover{transform:scale(1.05);opacity:0.9;}
+.ask-box{
+  width:75%;max-width:320px;padding:14px 18px;margin-top:25px;
+  border-radius:16px;background: linear-gradient(135deg,#1a2b3d,#0f1a26);
+  color:#f0f0f0;font-size:16px;font-weight:600;text-align:center;
+  cursor:pointer;border:2px solid #4fd1c5;
+  box-shadow:0 6px 12px rgba(79,209,197,0.35);transition:0.3s;
+}
+.ask-box:hover{background: linear-gradient(135deg,#273a4a,#1e2a38);color:#ffffff;transform:scale(1.02);}
+
+/* SUB OPTION SCREEN COMMON STYLES */
+.container{width:380px;max-width:95%;text-align:center;padding:20px;}
+.emoji{font-size:60px;margin-bottom:12px;}
+.sub-title{font-size:15px;color:#cbd5e0;margin-bottom:25px;}
+.option{display:flex;align-items:center;gap:12px;padding:16px;border-radius:18px;margin-bottom:14px;cursor:pointer;transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;text-align:left;}
+.option:hover{transform: scale(1.03);box-shadow: 0 0 15px rgba(255,255,255,0.2);}
+.option:active{transform: scale(0.97);box-shadow: 0 0 25px rgba(255,255,255,0.4);}
+.icon{font-size:26px;}
+.option-title{font-weight:bold;font-size:16px;}
+.option-sub{font-size:13px;color:#0f2027;}
+.back{margin:30px auto 0 auto;padding:12px 30px;background: linear-gradient(135deg, #ff7f50, #ffd369, #4fd1c5);background-size: 300% 300%;color:white;border-radius:14px;cursor:pointer;font-weight:bold;border:none;box-shadow:0 6px 15px rgba(0,0,0,0.3);font-size:16px;display:block;transition:0.4s;animation: gradientAnim 5s ease infinite;}
+.back:hover{transform:scale(1.05);box-shadow:0 8px 20px rgba(0,0,0,0.5);}
+@keyframes gradientAnim{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+.footer{margin-top:10px;font-size:12px;color:#94a3b8;}
+
+/* HAPPY SUB OPTION COLORS */
+.fun{background:linear-gradient(90deg,#f6d365,#fda085);color:black;}
+.affirm{background:linear-gradient(90deg,#e0f7fa,#80deea);color:black;}
+.energy{background:linear-gradient(90deg,#fff3cd,#ffe082);color:black;}
+.music{background:linear-gradient(90deg,#d1ecf1,#81d4fa);color:black;}
+/* SAD SUB OPTION COLORS */
+.relax{background:linear-gradient(90deg,#a0e9ff,#81d4fa);color:black;}
+.healing{background:linear-gradient(90deg,#c8f7dc,#81c784);color:black;}
+.calm{background:linear-gradient(90deg,#fff3cd,#ffe082);color:black;}
+.quotes{background:linear-gradient(90deg,#ffd9d9,#ffb6b9);color:black;}
+/* LOVE / ROMANTIC SUB OPTION COLORS */
+.romantic{background:linear-gradient(90deg,#ffccd5,#ff9acb);color:black;}
+.guidance{background:linear-gradient(90deg,#d3bfff,#bb88ff);color:black;}
+.confidence{background:linear-gradient(90deg,#a0e9ff,#81d4fa);color:black;}
+.sweet{background:linear-gradient(90deg,#d0f7c5,#a2e082);color:black;}
+/* BREAKUP SUB OPTION COLORS */
+.breakup1 { background: linear-gradient(90deg, #570e19, #bb6572); color: black; }
+.breakup2 { background: linear-gradient(90deg, #fff1d6, #ffd9a6); color: black; }
+.breakup3 { background: linear-gradient(90deg, #d6f0ff, #a6ddff); color: black; }
+.breakup4 { background: linear-gradient(90deg, #e6d6ff, #c1a6ff); color: black; }
+/* MOTIVATIONAL SUB OPTION COLORS */
+.motiv1 { background: linear-gradient(90deg, #d6fff0, #a6ffde); color: black; }
+.motiv2 { background: linear-gradient(90deg, #fff9d6, #fff1a6); color: black; }
+.motiv3 { background: linear-gradient(90deg, #ffd6c1, #ffb69a); color: black; }
+.motiv4 { background: linear-gradient(90deg, #d6f0ff, #a6ddff); color: black; }
+
+</style>
+</head>
+<body>
+
+<div class="floating-container" id="floatingContainer"></div>
+
+<!-- WELCOME SCREEN -->
+<div class="screen" id="welcomeScreen">
+  <div class="title">ManSaathi AI</div>
+  <div class="subtitle">Your AI Friend, Guide & Life Mentor</div>
+  <button class="start-btn" id="startBtn">Start Chat</button>
+</div>
+
+<!-- MOOD SELECTION SCREEN -->
+<div class="screen hidden" id="moodScreen">
+  <div class="mood-container">
+    <div class="mood-heading">How are you feeling today?</div>
+    <div class="mood-subtitle">Choose your mood to find the right guidance</div>
+    <button class="mood-btn happy" onclick="showHappySub()">HAPPY</button>
+    <button class="mood-btn sad" onclick="showSadSub()">SAD</button>
+    <button class="mood-btn love" onclick="showLoveSub()">LOVE / ROMANTIC</button>
+    <button class="mood-btn breakup" onclick="showBreakupSub()">BREAKUP</button>
+    <button class="mood-btn motivational" onclick="showMotivationalSub()">MOTIVATIONAL</button>
+    <button class="mood-btn auto" onclick="openChat('auto_mood','mood')">AUTO MOOD (AI DETECT)</button>
+    <button class="ask-box" onclick="openChat('free_chat','mood')">Don't know? Ask Anything ></button>
+  </div>
+</div>
+
+<!-- HAPPY SUB OPTION SCREEN -->
+<div class="screen hidden" id="happyScreen">
+  <div class="container">
+    <div class="emoji">😊</div>
+    <div class="title" style="font-size:28px;">You're Feeling Happy</div>
+    <div class="sub-title">Great! Let's make this happiness even better.</div>
+    <div class="option fun" onclick="openChat('happy_fun','happy')"><div class="icon">😉</div><div><div class="option-title">Fun Content</div><div class="option-sub">Funny videos, memes & light mood content</div></div></div>
+    <div class="option affirm" onclick="openChat('happy_affirm','happy')"><div class="icon">🍀</div><div><div class="option-title">Positive Affirmations</div><div class="option-sub">Boost your positivity with uplifting affirmations</div></div></div>
+    <div class="option energy" onclick="openChat('happy_energy','happy')"><div class="icon">⚡</div><div><div class="option-title">Energy Boost Challenges</div><div class="option-sub">Short fun challenges to keep energy high</div></div></div>
+    <div class="option music" onclick="openChat('happy_music','happy')"><div class="icon">🎵</div><div><div class="option-title">Feel Good Music</div><div class="option-sub">Feel-good music & mood tracks</div></div></div>
+    <button class="back" onclick="backToMood()">← Back to Mood Selection</button>
+    <div class="footer">Personalized suggestions based on your mood</div>
+  </div>
+</div>
+
+<!-- SAD SUB OPTION SCREEN -->
+<div class="screen hidden" id="sadScreen">
+  <div class="container">
+    <div class="emoji">😔</div>
+    <div class="title" style="font-size:28px;">You're Feeling Sad</div>
+    <div class="sub-title">It's okay. Let's help you feel a little better.</div>
+    <div class="option relax" onclick="openChat('sad_relax','sad')"><div class="icon">🕊️</div><div><div class="option-title">Relaxing Content</div><div class="option-sub">Calm visuals, soothing moments & stress-relief content</div></div></div>
+    <div class="option healing" onclick="openChat('sad_healing','sad')"><div class="icon">🤗</div><div><div class="option-title">Healing Advice</div><div class="option-sub">Gentle emotional guidance to help you feel better</div></div></div>
+    <div class="option calm" onclick="openChat('sad_calm','sad')"><div class="icon">🎶</div><div><div class="option-title">Calming Music</div><div class="option-sub">Calm music to relax your mind</div></div></div>
+    <div class="option quotes" onclick="openChat('sad_quotes','sad')"><div class="icon">📝</div><div><div class="option-title">Quotes</div><div class="option-sub">Peaceful & hopeful quotes</div></div></div>
+    <button class="back" onclick="backToMood()">← Back to Mood Selection</button>
+    <div class="footer">Personalized suggestions based on your mood</div>
+  </div>
+</div>
+
+<!-- LOVE / ROMANTIC SUB OPTION SCREEN -->
+<div class="screen hidden" id="loveScreen">
+  <div class="container">
+    <div style="font-size:60px; margin-bottom:10px;">❤️</div>
+    <div class="title" style="font-size:26px; margin-bottom:5px;">You're Feeling Romantic</div>
+    <div class="sub-title" style="margin-bottom:25px;">Let's spread love & warmth to your special one</div>
+    <div class="option romantic" onclick="openChat('love_quotes','love')"><div class="icon">💌</div><div><div class="option-title">Romantic Quotes</div><div class="option-sub">Heart touching love lines to make you feel special</div></div></div>
+    <div class="option guidance" onclick="openChat('love_guidance','love')"><div class="icon">🤝</div><div><div class="option-title">Relationship Guidance</div><div class="option-sub">Helpful guidance to improve trust, communication and bonding</div></div></div>
+    <div class="option confidence" onclick="openChat('love_confidence','love')"><div class="icon">🔥</div><div><div class="option-title">Confidence Boost</div><div class="option-sub">Feel bold. Feel unstoppable</div></div></div>
+    <div class="option sweet" onclick="openChat('love_motivation','love')"><div class="icon">😊</div><div><div class="option-title">Sweet Motivation</div><div class="option-sub">Soft positivity for your heart</div></div></div>
+    <button class="back" onclick="backToMood()">← Back to Mood Selection</button>
+    <div class="footer">Personalized suggestions based on your mood</div>
+  </div>
+</div>
+
+<!-- BREAKUP SUB OPTION SCREEN -->
+<div class="screen hidden" id="breakupScreen">
+  <div class="container">
+    <div class="emoji">💔</div>
+    <div class="title" style="font-size:28px;">You're Healing from Heartbreak</div>
+    <div class="sub-title">Let's make healing simple and gentle</div>
+
+    <div class="option relax" onclick="openChat('breakup_healing','breakup')">
+      <div class="icon">🩹</div>
+      <div>
+        <div class="option-title">Emotional Healing</div>
+        <div class="option-sub">Gentle support to help your heart recover</div>
+      </div>
+    </div>
+
+    <div class="option fun" onclick="openChat('breakup_moveon','breakup')">
+      <div class="icon">🌸</div>
+      <div>
+        <div class="option-title">Move On Content</div>
+        <div class="option-sub">Positive guidance to help you let go and move forward</div>
+      </div>
+    </div>
+
+    <div class="option quotes" onclick="openChat('breakup_growth','breakup')">
+      <div class="icon">🌱</div>
+      <div>
+        <div class="option-title">Self-Growth Help</div>
+        <div class="option-sub">Improve yourself, become stronger</div>
+      </div>
+    </div>
+
+    <div class="option music" onclick="openChat('breakup_mindset','breakup')">
+      <div class="icon">🧠</div>
+      <div>
+        <div class="option-title">Strong Mindset</div>
+        <div class="option-sub">Unbreakable discipline over emotions</div>
+      </div>
+    </div>
+
+    <button class="back" onclick="backToMood()">← Back to Mood Selection</button>
+    <div class="footer">Personalized suggestions based on your mood</div>
+  </div>
+</div>
+
+<!-- MOTIVATIONAL SUB OPTION SCREEN -->
+<div class="screen hidden" id="motivationalScreen">
+  <div class="container">
+    <div class="emoji">🚀</div>
+    <div class="title" style="font-size:28px;">You're Feeling Motivated</div>
+    <div class="sub-title">Let's turn this motivation into real action</div>
+
+    <div class="option affirm" onclick="openChat('motivation_daily','motivational')">
+      <div class="icon">💡</div>
+      <div>
+        <div class="option-title">Daily Motivation</div>
+        <div class="option-sub">Simple daily push to keep you inspired & positive</div>
+      </div>
+    </div>
+
+    <div class="option energy" onclick="openChat('motivation_study','motivational')">
+      <div class="icon">🎯</div>
+      <div>
+        <div class="option-title">Study / Focus Boost</div>
+        <div class="option-sub">improve focus, reduse distractions, and stay consistent</div>
+      </div>
+    </div>
+
+    <div class="option guidance" onclick="openChat('motivation_success','motivational')">
+      <div class="icon">📈</div>
+      <div>
+        <div class="option-title">Success & Growht</div>
+        <div class="option-sub">Grow. Achieve. Level Up</div>
+      </div>
+    </div>
+
+    <div class="option fun" onclick="openChat('motivational_mental','motivational')">
+      <div class="icon">🧘</div>
+      <div>
+        <div class="option-title">Healing / Mental Strenght</div>
+        <div class="option-sub">Build strenght, balance, resilience</div>
+      </div>
+    </div>
+
+    <button class="back" onclick="backToMood()">← Back to Mood Selection</button>
+    <div class="footer">Personalized suggestions based on your mood</div>
+  </div>
+</div>
+
+<script>
+  
+/* FLOATING EMOJIS */
+const emojis=["❤️","🤍","🫂","🫶","💖","🥰","🥺","😌","🤗","💫","💝","🌹","💛"];
+function createEmoji(){
+  const emoji = document.createElement("div");
+  emoji.className = "floating-emoji";
+  emoji.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+  emoji.style.left=Math.random()*100+"vw";
+  emoji.style.animationDuration=(5+Math.random()*5)+"s";
+  document.getElementById("floatingContainer").appendChild(emoji);
+  setTimeout(()=> emoji.remove(),10000);
+}
+setInterval(createEmoji,700);
+
+/* SCREEN SWITCH */
+const startBtn=document.getElementById("startBtn");
+const welcomeScreen=document.getElementById("welcomeScreen");
+const moodScreen=document.getElementById("moodScreen");
+const happyScreen=document.getElementById("happyScreen");
+const sadScreen=document.getElementById("sadScreen");
+const loveScreen=document.getElementById("loveScreen");
+const breakupScreen=document.getElementById("breakupScreen");
+const motivationalScreen=document.getElementById("motivationalScreen");
+
+startBtn.addEventListener("click",()=>{welcomeScreen.classList.add("hidden");moodScreen.classList.remove("hidden");});
+function showHappySub(){moodScreen.classList.add("hidden");happyScreen.classList.remove("hidden");}
+function showSadSub(){moodScreen.classList.add("hidden");sadScreen.classList.remove("hidden");}
+function showLoveSub(){moodScreen.classList.add("hidden");loveScreen.classList.remove("hidden");}
+function showBreakupSub(){moodScreen.classList.add("hidden");breakupScreen.classList.remove("hidden");}
+function showMotivationalSub(){moodScreen.classList.add("hidden");motivationalScreen.classList.remove("hidden");}
+function backToMood(){
+  happyScreen.classList.add("hidden");
+  sadScreen.classList.add("hidden");
+  loveScreen.classList.add("hidden");
+  breakupScreen.classList.add("hidden");
+  motivationalScreen.classList.add("hidden");
+  moodScreen.classList.remove("hidden");
+}
+console.log(sessionStorage.getItem("lastScreen"));
+</script>
+
+<script>
+
+function openChat(type, screenName){
+
+  sessionStorage.setItem("chatType", type);
+  sessionStorage.setItem("lastScreen", screenName); // 👈 MAIN FIX
+
+  window.location.href = "chat.html";
+}
+
+window.onload = function () {
+
+  hideAllScreens();
+
+  let lastScreen = sessionStorage.getItem("lastScreen");
+
+  if (lastScreen === "happy") {
+    document.getElementById("happyScreen").classList.remove("hidden");
+  }
+  else if (lastScreen === "sad") {
+    document.getElementById("sadScreen").classList.remove("hidden");
+  }
+  else if (lastScreen === "love") {
+    document.getElementById("loveScreen").classList.remove("hidden");
+  }
+  else if (lastScreen === "breakup") {
+    document.getElementById("breakupScreen").classList.remove("hidden");
+  }
+  else if (lastScreen === "motivational") {
+    document.getElementById("motivationalScreen").classList.remove("hidden");
+  }
+  else if (lastScreen === "mood") {
+    document.getElementById("moodScreen").classList.remove("hidden");
+  }
+  else {
+    document.getElementById("welcomeScreen").classList.remove("hidden");
+  }
+
+};
+function hideAllScreens(){
+  document.getElementById("welcomeScreen").classList.add("hidden");
+  document.getElementById("moodScreen").classList.add("hidden");
+  document.getElementById("happyScreen").classList.add("hidden");
+  document.getElementById("sadScreen").classList.add("hidden");
+  document.getElementById("loveScreen").classList.add("hidden");
+  document.getElementById("breakupScreen").classList.add("hidden");
+  document.getElementById("motivationalScreen").classList.add("hidden");
+}
+</script>
+
+</body>
+</html>
