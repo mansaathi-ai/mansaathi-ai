@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ManSaathi Chat</title>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
 h1 {
@@ -316,37 +315,31 @@ transform:translateY(0);
 100%{background-position:200%}
 
 }
-
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+  /* Baki elements ko yahan adjust karein */
+}
+img {
+  max-width: 100%;
+  height: auto;
+}body {
+  overflow-x: hidden;
+  width: 100%;
+}
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 </style>
 
 </head>
 
 <style>
-  body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
-  @media (max-width: 768px) {
-  .container {
-    padding: 10px;
-  }
-
-  h1 {
-    font-size: 32px;
-  }
-
-  .chat-box {
-    width: 100%;
-  }
-}
-  .chat-input {
-  width: 95%;
-  max-width: 600px;
-  height: 50px;
-  font-size: 16px;
-}
   
   .userMsg {
   font-size: 15px;
@@ -405,92 +398,7 @@ transform:translateY(0);
 
   display: none;
 }
-/* 🔥 UNIVERSAL FIX */
-* {
-  box-sizing: border-box;
-}
 
-/* BODY FIX */
-body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-/* 🔥 HEADING AUTO SIZE */
-h1 {
-  font-size: clamp(24px, 5vw, 42px);
-  text-align: center;
-}
-
-/* CHAT AREA */
-.chat-container {
-  padding: 10px;
-  padding-bottom: 80px; /* input ke liye space */
-}
-
-/* MESSAGE */
-.message {
-  max-width: 75%;
-  font-size: 14px;
-  word-wrap: break-word;
-}
-
-/* INPUT AREA FIX */
-.input-area {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  padding: 8px;
-  background: #0f172a;
-}
-
-/* INPUT BOX */
-.input-area input {
-  flex: 1;
-  padding: 10px;
-  font-size: 14px;
-
-  border-radius: 20px;
-  border: none;
-  outline: none;
-}
-
-/* SEND BUTTON */
-.send-btn {
-  padding: 10px 14px;
-  font-size: 14px;
-
-  border-radius: 20px;
-  border: none;
-
-  background: #22c55e;
-  color: black;
-}
-
-/* 🔥 MOBILE FIX */
-@media (max-width: 600px) {
-
-  h1 {
-    font-size: 24px;
-  }
-
-  button {
-    width: 100%;
-    padding: 12px;
-  }
-
-  .message {
-    font-size: 13px;
-  }
-
-}
 </style>
 <body>
 <div id="scrollBtn">
