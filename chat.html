@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 
@@ -328,6 +328,14 @@ img {
 }body {
   overflow-x: hidden;
   width: 100%;
+} .main-container {
+  height: 100vh; /* Full screen height */
+  display: flex;
+  flex-direction: column;
+}
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto; /* Sirf messages scroll honge, puri screen nahi */
 }
 html {
   box-sizing: border-box;
