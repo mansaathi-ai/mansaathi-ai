@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 <head>
 
@@ -315,43 +315,68 @@ transform:translateY(0);
 100%{background-position:200%}
 
 }
-@media (max-width: 768px) {
-  .container {
-    width: 100%;
-    padding: 10px;
-  }
-  /* Baki elements ko yahan adjust karein */
-}
-img {
-  max-width: 100%;
-  height: auto;
-}body {
-  overflow-x: hidden;
-  width: 100%;
-} .main-container {
-  height: 100vh; /* Full screen height */
-  display: flex;
-  flex-direction: column;
-}
-.chat-messages {
-  flex-grow: 1;
-  overflow-y: auto; /* Sirf messages scroll honge, puri screen nahi */
-  /* User ko galti se zoom karne se rokne ke liye */
+/* 🔥 FINAL MOBILE FIX PATCH */
+
 html, body {
-  touch-action: pan-x pan-y; /* Scroll hoga par pinch-zoom nahi */
-  overscroll-behavior: none; /* Pull-to-refresh jaisi cheezein control karne ke liye */
+  height: 100%;
+  overflow: hidden;
 }
 
-/* Taaki mobile keyboard khulne par layout na bigde */
-input {
-  font-size: 16px !important; 
+/* Full layout control */
+.app-container {
+  height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
+
+/* Header compact */
+.app-header {
+  padding: 8px 12px !important;
 }
-html {
-  box-sizing: border-box;
+
+/* Title size control */
+.logo {
+  font-size: 18px !important;
 }
-*, *:before, *:after {
-  box-sizing: inherit;
+
+/* Chat area bada karo */
+.chat-window {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  padding: 10px !important;
+}
+
+/* Bubble size control */
+.ai-bubble, .user-bubble {
+  max-width: 75% !important;
+  font-size: 14px !important;
+  padding: 10px 12px !important;
+}
+
+/* Input bottom fix */
+.input-section {
+  padding: 8px !important;
+}
+
+/* Input box size correct */
+.input-wrapper {
+  border-radius: 25px !important;
+  padding: 5px 10px !important;
+}
+
+/* Input text zoom fix */
+.input-wrapper input {
+  font-size: 16px !important;
+}
+
+/* Send button small */
+.send-btn {
+  padding: 8px 12px !important;
+}
+
+/* Extra space remove */
+.chat-window::-webkit-scrollbar {
+  display: none;
 }
 </style>
 
