@@ -321,8 +321,7 @@ transform:translateY(0);
     padding: 10px;
     gap: 10px;
   }
-  @media (max-width: 768px) {
-
+  
   .inputContainer {
     position: relative;
     padding: 6px 8px;
@@ -341,7 +340,37 @@ transform:translateY(0);
     border-radius: 15px;
     background: black;
     color: white;
+  } @media (max-width: 768px) {
+
+  html, body {
+    height: 100%;
+    overflow: hidden;          /* screen hilna band */
   }
+
+  .app-container {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .chat-window {
+    flex: 1;
+    overflow-y: auto;          /* sirf chat scroll hogi */
+  }
+
+  .inputContainer {
+    position: sticky;
+    bottom: 0;
+    background: #0b111a;
+    padding: 6px 8px;
+  }
+
+  .input-wrapper {
+    height: 42px;              /* stable height */
+  }
+
+}input {
+  font-size: 16px !important;
+}
 
 }
 
