@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head> 
+<head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ManSaathi Chat</title>
@@ -309,160 +309,20 @@ transform:translateY(0);
 100%{background-position:200%}
 
 }
-/* 1. Global Reset - Isse spacing perfect ho jayegi */
-html {
-  box-sizing: border-box;
-}
-*, *:before, *:after {
-  box-sizing: inherit;
-}
 
-body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  width: 100%;
-  background-color: #0b111a; /* Dark theme color */
-  /* Zoom aur Pull-to-refresh block karne ke liye */
-  touch-action: pan-x pan-y; 
-  overscroll-behavior: none;
-}
-
-/* 2. Main Container - Jo screen ko full height dega */
-.main-container {
-  height: 100dvh; /* Dynamic height for mobile */
-  display: flex;
-  flex-direction: column;
-}
-
-/* 3. Chat Messages Area - Jo scroll hoga par header/input ko nahi hilayega */
-.chat-messages {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 20px 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-/* 4. Professional Input Box Fix */
-input {
-  font-size: 16px !important; /* Keyboard khulne par auto-zoom rokne ke liye */
-}
-
-.input-section {
-    flex-shrink: 0; /* Isse input niche fix rahega, dabega nahi */
-    padding: 15px;
-    padding-bottom: 25px; /* Mobile bottom bar ke liye space */
-}
-
-/* 5. Responsive Adjustment */
 @media (max-width: 768px) {
-  .container {
-    width: 100%;
-    padding: 10px;
+
+  .ai-bubble, .user-bubble {
+    max-width: 65%;
+    font-size: 14px;
   }
-}
 
-img {
-  max-width: 100%;
-  height: auto;
-}
-/* Isse Chat aur Input kabhi ek dusre ke upar nahi chadhenge */
-.main-container {
-    display: flex;
-    flex-direction: column;
-    height: 100dvh; 
-}
-
-.chat-messages {
-    flex: 1; /* Ye messages ko poori bachi hui jagah dega */
-    overflow-y: auto;
-    padding-bottom: 20px;
-}
-
-.input-section {
-    flex-shrink: 0; /* Isse input hamesha niche fix rahega */
+  .chat-window {
     padding: 10px;
-    background: #0b111a;
-    position: relative; /* Fixed hata do agar lagaya hai to */
-}
-/* 1. Chat Window ko poori screen pe failao */
-.chat-window {
-    flex: 1;
-    background-color: #0b141a; /* WhatsApp Dark Mode color */
-    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); /* Subtle pattern */
-    background-blend-mode: overlay;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
     gap: 10px;
-    overflow-y: auto;
-}
+  }
 
-/* 2. Message Bubbles like WhatsApp */
-.ai-bubble {
-    align-self: flex-start;
-    background: #202c33;
-    color: #e9edef;
-    padding: 8px 12px;
-    border-radius: 0px 10px 10px 10px; /* Top-left corner sharp */
-    max-width: 85%;
-    box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
-    font-size: 15px;
 }
-
-.user-bubble {
-    align-self: flex-end;
-    background: #005c4b; /* WhatsApp Green */
-    color: #e9edef;
-    padding: 8px 12px;
-    border-radius: 10px 0px 10px 10px; /* Top-right corner sharp */
-    max-width: 85%;
-    box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
-    font-size: 15px;
-}
-
-/* 3. Input Area Fix (WhatsApp Style) */
-.input-section {
-    background: #202c33;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.input-wrapper {
-    background: #2a3942;
-    border-radius: 25px;
-    flex: 1;
-    display: flex;
-    padding: 5px 15px;
-}
-
-input {
-    background: transparent;
-    border: none;
-    color: white;
-    padding: 10px;
-    width: 100%;
-    outline: none;
-    font-size: 16px;
-}
-
-/* 4. Send Button Circle */
-.send-btn {
-    background: #00a884;
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    border: none;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 </style>
 
 </head>
