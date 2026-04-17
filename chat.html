@@ -2,139 +2,375 @@
 <html>
 <head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ManSaathi Chat</title>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
-
-/* GLOBAL FIX */
-*{
-  box-sizing: border-box;
+  
+h1 {
+  font-size: clamp(28px, 6vw, 60px);
 }
-
-html, body{
-  margin:0;
-  height:100%;
-  overflow:hidden;
-}
-
-/* BODY */
 body{
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-  font-family:Arial;
-  color:white;
-  display:flex;
-  flex-direction:column;
-  height:100dvh; /* 🔥 important fix */
+margin:0;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+font-family:Arial;
+color:white;
+display:flex;
+flex-direction:column;
+height:100vh;
 }
 
 /* HEADER */
+
 .header{
-  position:relative;
-  text-align:center;
-  padding:20px 10px 10px; /* 🔥 gap reduce */
+position:relative;
+text-align:center;
+padding-top:60px;
 }
 
 /* BACK BUTTON */
+
 .backBtn{
-  position:absolute;
-  left:10px;
-  top:10px;
-  border-radius:20px;
-  border:none;
-  background:#1e293b;
-  color:white;
-  font-size:14px;
+
+position:absolute;
+left:20px;
+
+border-radius:20px;
+border:none;
+
+background:#1e293b;
+color:white;
+
+font-size:14px;
+
+cursor:pointer;
+
+transition:0.25s;
+
+}
+
+.backBtn:hover{
+
+background:#334155;
+transform:scale(1.05);
+
 }
 
 /* TITLE */
+
 .title{
-  font-size:22px; /* 🔥 mobile fix */
+font-size:32px;
+font-weight:700;
+letter-spacing:1px;
+text-align:center;
+
+background: linear-gradient(90deg,#6ee7d6,#22d3ee,#6ee7d6);
+background-size:200%;
+
+-webkit-background-clip:text;
+background-clip:text;
+-webkit-text-fill-color:transparent;
+
+animation: glowMove 5s linear infinite;
 }
 
+.subtitle{
+opacity:0.75;
+font-size:14px;
+margin-top:6px;
+}
+@keyframes glowMove{
+0%{
+background-position:0%;
+}
+
+100%{
+background-position:200%;
+}
+}
 /* CHAT AREA */
+
 .chatArea{
-  flex:1;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  max-width:700px;
-  margin:auto;
-  padding:10px;
-  width:100%;
+
+flex:1;
+overflow-y:auto;
+
+display:flex;
+flex-direction:column;
+
+gap:14px;
+
+max-width:700px;
+margin:auto;
+
+padding:100px 20px 30px 20px;
+
+width:100%;
+box-sizing:border-box;
+
+scrollbar-width:none;
+
 }
 
-/* MESSAGES */
-.aiMsg, .userMsg{
-  padding:10px 14px;
-  max-width:70%;
-  font-size:14px;
+.chatArea::-webkit-scrollbar{
+display:none;
 }
+
+/* MESSAGE */
+
+.aiMsg,
+.userMsg{
+
+padding:12px 16px;
+max-width: 60%;
+
+line-height:1.3;
+
+word-wrap:break-word;
+
+font-size:16px;
+
+animation:fadeUp 0.25s ease;
+
+}
+
+/* AI */
 
 .aiMsg{
-  background:#2c3e50;
-  border-radius:16px 16px 16px 6px;
+
+background:#2c3e50;
+
+border-radius:16px 16px 16px 6px;
+
+align-self:flex-start;
+
 }
+
+/* USER */
 
 .userMsg{
-  background:#6ee7d6;
-  color:black;
-  border-radius:16px 16px 6px 16px;
-  align-self:flex-end;
+
+background:#6ee7d6;
+
+color:black;
+
+border-radius:16px 16px 6px 16px;
+
+align-self:flex-end;
+
 }
 
-/* INPUT FIX (MOST IMPORTANT) */
+/* INPUT AREA */
+
 .inputContainer{
-  position:fixed;   /* 🔥 FIX */
-  bottom:0;
-  left:0;
-  width:100%;
-  padding:6px;
-  background:#0f172a;
+
+padding:5px;
+
+max-width:700px;
+
+margin:auto;
+
+width:100%;
+
+display:flex;
+
 }
 
-/* BOX */
+/* OUTER BORDER */
+
 .chatBox{
-  width:100%;
-  padding:2px;
-  border-radius:25px;
+
+width:100%;
+
+padding:3px;
+
+border-radius:30px;
+
+background:linear-gradient(
+90deg,
+#00f5ff,
+#00ff9d,
+#ffd000,
+#ff00ea,
+#00f5ff
+);
+
+background-size:400%;
+
+animation:borderMove 7s linear infinite;
+
 }
 
-/* INNER */
+/* INNER INPUT */
+
 .inputArea{
-  background:#1e293b;
-  border-radius:25px;
-  display:flex;
-  align-items:center;
-  padding:6px 10px;
+
+width:100%;
+
+background:#1e293b;
+
+border-radius:28px;
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+padding:8px 18px;
+
+box-sizing:border-box;
+
 }
 
 /* TEXTAREA */
+
 textarea{
-  flex:1;
-  background:transparent;
-  border:none;
-  outline:none;
-  color:white;
-  font-size:16px; /* 🔥 zoom fix */
+
+flex:1;
+
+background:transparent;
+border:none;
+
+outline:none;
+
+color:white;
+
+font-size:16px;
+
+resize:none;
+
+min-height:24px;
+max-height:120px;
+
+line-height:1.4;
+
+overflow-y:auto;
+
+scrollbar-width:none;
+
+}
+
+textarea::-webkit-scrollbar{
+display:none;
 }
 
 /* SEND BUTTON */
+
 .sendBtn{
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  background:#22d3ee;
-  border:none;
+
+width:38px;
+height:38px;
+
+border-radius:50%;
+border:none;
+
+background:#22d3ee;
+
+color:black;
+
+font-size:18px;
+
+cursor:pointer;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
 }
 
-/* EXTRA SPACE FOR INPUT */
-.chatArea{
-  padding-bottom:70px; /* 🔥 important */
+/* ANIMATIONS */
+
+@keyframes borderMove{
+0%{background-position:0%}
+100%{background-position:400%}
 }
 
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(10px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+@keyframes shine{
+
+0%{background-position:0%}
+
+100%{background-position:200%}
+
+}
+
+@media (max-width: 768px) {
+
+  .ai-bubble, .user-bubble {
+    max-width: 65%;
+    font-size: 14px;
+  }
+
+   chat-window {
+    padding: 10px;
+    gap: 10px;
+  } 
+  
+}@media (max-width: 768px) {
+
+  html, body {
+    height: 100%;
+    overflow: hidden;          /* screen hilna band */
+  }
+
+  .app-container {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .chat-window {
+    flex: 1;
+    overflow-y: auto;          /* sirf chat scroll hogi */
+  }
+
+  .inputContainer {
+    position: sticky;
+    bottom: 0;
+    background: #0b111a;
+    padding: 6px 8px;
+  }
+
+  .input-wrapper {
+    height: 42px;              /* stable height */
+  }
+}@media (max-width: 768px) {
+
+  .inputContainer {
+    position: relative;
+    padding: 8px 10px;
+  }
+
+  .input-wrapper {
+    padding-right: 70px; /* space for +New */
+  }
+
+  .new-chat-top {
+    position: absolute;
+    right: 20px;
+    bottom: 18px;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 15px;
+    background: black;
+    color: white;
+  }
+}
 </style>
 
 </head>
