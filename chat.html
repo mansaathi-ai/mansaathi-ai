@@ -842,7 +842,22 @@ scrollBtn.onclick = () => {
 };
 
  
- 
+ const menuBtn = document.getElementById("menuBtn");
+const menuBox = document.getElementById("menuBox");
+
+menuBtn.onclick = () => {
+  if (menuBox.style.display === "block") {
+    menuBox.style.display = "none";
+  } else {
+    menuBox.style.display = "block";
+  }
+};
+
+document.addEventListener("click", (e) => {
+  if (!menuBtn.contains(e.target) && !menuBox.contains(e.target)) {
+    menuBox.style.display = "none";
+  }
+});
 </script>
 
 </body>
