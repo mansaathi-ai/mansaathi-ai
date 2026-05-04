@@ -8,7 +8,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
- 
+ #menuBtn {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.menuBox {
+  display: none;
+  position: absolute;
+  right: 15px;
+  top: 45px;
+  background: #1e293b;
+  border-radius: 10px;
+  min-width: 140px;
+  z-index: 100;
+}
+
+.menuBox div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.menuBox div:hover {
+  background: #334155;
+}
 h1 {
   font-size: clamp(28px, 6vw, 60px);
 }
@@ -483,6 +512,11 @@ textarea {
 
 <div class="subtitle" id="subtitle">
 
+</div><button id="menuBtn">⋮</button>
+
+<div id="menuBox" class="menuBox">
+  <div onclick="clearChat()">Clear Chat</div>
+  <div onclick="deleteChat()">Delete Chat</div>
 </div>
 
 </div>
