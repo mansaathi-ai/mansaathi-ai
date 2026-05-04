@@ -856,23 +856,17 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
- const menuBtn = document.getElementById("menuBtn");
-const menuBox = document.getElementById("menuBox");
-
-menuBtn.onclick = () => {
-  if (menuBox.style.display === "block") {
-    menuBox.style.display = "none";
-  } else {
-    menuBox.style.display = "block";
-  }
-};
-
-document.addEventListener("click", (e) => {
-  if (!menuBtn.contains(e.target) && !menuBox.contains(e.target)) {
-    menuBox.style.display = "none";
-  }
-});
  
+ function clearChat() {
+  const chatArea = document.getElementById("chatArea");
+  chatArea.innerHTML = "";
+}
+
+function deleteChat() {
+  const chatArea = document.getElementById("chatArea");
+  chatArea.innerHTML = "";
+  alert("Chat deleted");
+}
 </script>
 
 </body>
