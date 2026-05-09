@@ -642,7 +642,11 @@ typing.remove();
 
 let ai=document.createElement("div");
 
-ai.className="aiMsg";
+if(chat.children.length === 0){
+   ai.className = "aiMsg permanentMessage";
+}else{
+   ai.className = "aiMsg";
+}
 
 ai.innerText="Main samajh raha hoon… agar chaho to aur share kar sakte ho.";
 
@@ -857,7 +861,19 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
+function clearChat() {
 
+  const allMessages = document.querySelectorAll(".aiMsg, .userMsg");
+
+  allMessages.forEach(msg => {
+
+    if (!msg.classList.contains("permanentMessage")) {
+      msg.remove();
+    }
+
+  });
+
+}
 </script>
 </body>
 </html>
