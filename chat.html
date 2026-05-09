@@ -857,6 +857,20 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
+ function clearChat() {
+
+  const chatArea = document.getElementById("chatArea");
+
+  chatArea.innerHTML = `
+
+    <div class="botMessage">
+      Aaj ek step aage badhte hain 🌸 chhota hi sahi.
+      Sabse zyada kis baat se hurt ho?
+    </div>
+
+  `;
+
+}
 </script>
 </body>
 </html>
