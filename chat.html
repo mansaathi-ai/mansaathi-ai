@@ -861,19 +861,7 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
-function clearChat() {
 
-  const allMessages = document.querySelectorAll(".aiMsg, .userMsg");
-
-  allMessages.forEach(msg => {
-
-    if (!msg.classList.contains("permanentMessage")) {
-      msg.remove();
-    }
-
-  });
-
-}
 </script>
 </body>
 </html>
