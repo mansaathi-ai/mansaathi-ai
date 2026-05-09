@@ -873,6 +873,18 @@ function clearChat() {
 
   });
 
+  // agar permanent message bhi missing ho
+  if(document.querySelectorAll(".permanentMessage").length === 0){
+
+      let ai = document.createElement("div");
+
+      ai.className = "aiMsg permanentMessage";
+
+      ai.innerText = "Bas normal baat karo 🤖 main tumhare mood ko samajhne ki koshish karunga.";
+
+      chat.appendChild(ai);
+  }
+
 }
 </script>
 </body>
