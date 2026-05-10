@@ -861,7 +861,32 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
+<script>
 
+function clearChat() {
+
+  let confirmClear = confirm("Clear all chats?");
+
+  if(confirmClear){
+
+    const msgs = document.querySelectorAll(".userMsg, .aiMsg");
+
+    msgs.forEach(msg => {
+
+      // permanent intro message safe
+      if(!msg.classList.contains("permanentMessage")){
+        msg.remove();
+      }
+
+    });
+
+    localStorage.clear();
+
+  }
+
+}
+
+</script>
 </script>
 </body>
 </html>
