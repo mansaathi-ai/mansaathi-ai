@@ -516,7 +516,7 @@ textarea {
 </div><button id="menuBtn">⋮</button>
 
 <div id="menuBox" class="menuBox">
-  <div onclick="clearChat()">Clear Chat</div>
+  <div onclick="handleClearChat()">Clear Chat</div>
 </div>
 
 </div>
@@ -861,32 +861,43 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
-<script>
 
-function clearChat() {
+function handleClearChat() {
+    // 1. WhatsApp jaisa alert (Warning message ke sath)
+    const warningMessage = "Warning: Kya aap is chat ko clear karna chahte hain?\n\nIsse aapke saare messages delete ho jayenge, lekin AI ka pehla message bacha rahega.";
+    
+    const userConfirmed = confirm(warningMessage);
 
-  let confirmClear = confirm("Clear all chats?");
+    // 2. Agar user 'OK' dabaye tabhi delete hoga
+    if (userConfirmed) {
+        try {
+            // LocalStorage se data uthao
+            let savedChat = localStorage.getItem('chat_history');
 
-  if(confirmClear){
+            if (savedChat) {
+                let chatArray = JSON.parse(savedChat);
 
-    const msgs = document.querySelectorAll(".userMsg, .aiMsg");
+                if (chatArray.length > 0) {
+                    // Sirf pehla message (index 0) rakhein
+                    let firstMessageOnly = [chatArray[0]];
 
-    msgs.forEach(msg => {
+                    // LocalStorage update karein (Taki reload par chat wapas na aaye)
+                    localStorage.setItem('chat_history', JSON.stringify(firstMessageOnly));
 
-      // permanent intro message safe
-      if(!msg.classList.contains("permanentMessage")){
-        msg.remove();
-      }
-
-    });
-
-    localStorage.clear();
-
-  }
-
+                    // UI ko refresh karein
+                    // Yahan 'renderChat' ki jagah apne UI function ka naam likhein
+                    renderChat(firstMessageOnly); 
+                }
+            }
+        } catch (error) {
+            console.error("Error clearing chat:", error);
+        }
+    } else {
+        // Agar user 'Cancel' dabaye toh kuch mat karo
+        console.log("User ne cancel kar diya.");
+    }
 }
 
-</script>
 </script>
 </body>
 </html>
