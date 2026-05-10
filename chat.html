@@ -349,16 +349,7 @@ html, body {
   height: 100%;
   overflow: hidden;
 }
-<div id="customConfirmModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); align-items: center; justify-content: center;">
-    <div style="background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 320px; text-align: left; margin: 15% auto; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
-        <h3 style="margin: 0 0 12px 0; font-size: 19px; color: #128C7E;">Clear chat?</h3>
-        <p style="margin: 0 0 25px 0; font-size: 15px; color: #444; line-height: 1.4;">Kya aap sach mein is chat ko clear karna chahte hain? AI ka welcome message bacha rahega.</p>
-        <div style="display: flex; justify-content: flex-end; gap: 20px;">
-            <button onclick="closeModal()" style="background: none; border: none; color: #075E54; font-weight: 600; cursor: pointer; font-size: 14px; text-transform: uppercase;">Cancel</button>
-            <button onclick="confirmClear()" style="background: none; border: none; color: #d32f2f; font-weight: 600; cursor: pointer; font-size: 14px; text-transform: uppercase;">Clear Chat</button>
-        </div>
-    </div>
-</div>
+
 body {
   height: 100dvh;
   display: flex;
@@ -869,35 +860,35 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
-// 1. Popup kholne ke liye
 function handleClearChat() {
-    document.getElementById('customConfirmModal').style.display = 'flex';
-}
+    // 1. WhatsApp jaisa Confirmation alert
+    const confirmDelete = confirm("⚠️ Warning: Kya aap sach mein IS chat ko clear karna chahte hain?");
 
-// 2. Popup band karne ke liye
-function closeModal() {
-    document.getElementById('customConfirmModal').style.display = 'none';
-}
+    if (confirmDelete) {
+        // 2. Wahi key use karein jo aapne load karne ke liye banayi hai
+        // Note: 'chatType' wahi variable hona chahiye jo abhi active hai
+        let currentKey = `chatHistory_${chatType}`; 
+        
+        let data = localStorage.getItem(currentKey);
 
-// 3. Asli Delete Logic (Sirf isi chat ka)
-function confirmClear() {
-    // Ye line aapke purane code ke hisaab se hai
-    let currentKey = `chatHistory_${chatType}`; 
-    let data = localStorage.getItem(currentKey);
+        if (data) {
+            try {
+                let history = JSON.parse(data);
 
-    if (data) {
-        let history = JSON.parse(data);
-        if (history.length > 0) {
-            // Sirf pehla message (Index 0) bachega
-            let firstMsgOnly = [history[0]];
-            localStorage.setItem(currentKey, JSON.stringify(firstMsgOnly));
-            
-            // Modal band karke refresh
-            closeModal();
-            location.reload(); 
+                if (Array.isArray(history) && history.length > 0) {
+                    // 3. Logic: Sirf pehla message (AI ka) bacha lo
+                    let firstMessageOnly = [history[0]];
+
+                    // 4. LocalStorage mein wapas save karo (overwrite)
+                    localStorage.setItem(currentKey, JSON.stringify(firstMessageOnly));
+                    
+                    // 5. Page reload karein taaki screen saaf ho jaye
+                    location.reload();
+                }
+            } catch (e) {
+                console.error("Chat clear karne mein error:", e);
+            }
         }
-    } else {
-        closeModal();
     }
 }
 </script>
