@@ -861,7 +861,28 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
+<script>
 
+function clearChat() {
+
+  // sab normal messages select karo
+  const msgs = document.querySelectorAll(".userMsg, .aiMsg");
+
+  msgs.forEach(msg => {
+
+    // permanent msg ko mat hatao
+    if (!msg.classList.contains("permanentMessage")) {
+      msg.remove();
+    }
+
+  });
+
+  // storage bhi clear karo
+  localStorage.clear();
+
+}
+
+</script>
 </script>
 </body>
 </html>
