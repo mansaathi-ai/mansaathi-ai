@@ -861,35 +861,41 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
-
 function handleClearChat() {
-    // 1. WhatsApp jaisa Confirmation Alert
-    const confirmDelete = confirm("Warning: Kya aap sach mein saare messages delete karna chahte hain?");
-    
+    // 1. WhatsApp jaisa alert
+    const confirmDelete = confirm("⚠️ Warning: Kya aap sach mein chat clear karna chahte hain?\n(AI ka pehla message bacha rahega)");
+
     if (confirmDelete) {
-        // 2. LocalStorage se data uthao (Apni key ka naam check karein, yahan 'chat_history' hai)
-        let storageKey = 'chat_history'; 
-        let data = localStorage.getItem(storageKey);
+        // 2. LocalStorage mein jitni bhi keys hain unhe check karo
+        for (let i = 0; i < localStorage.length; i++) {
+            let key = localStorage.key(i);
+            let data = localStorage.getItem(key);
 
-        if (data) {
-            let chatArray = JSON.parse(data);
+            try {
+                let chatArray = JSON.parse(data);
 
-            if (chatArray.length > 0) {
-                // 3. LOGIC: Sirf pehla message (Index 0) bacha ke rakho
-                let firstMsg = [chatArray[0]];
+                // Check karo ki kya ye wahi array hai jisme messages hain
+                if (Array.isArray(chatArray) && chatArray.length > 0) {
+                    
+                    // Logic: Sirf pehla message (index 0) bacha lo
+                    let firstMessageOnly = [chatArray[0]];
 
-                // 4. LocalStorage mein naya (chhota) array save karo
-                localStorage.setItem(storageKey, JSON.stringify(firstMsg));
-
-                // 5. UI ko turant saaf karke sirf 1st message dikhao
-                // Agar aapka render function kaam nahi kar raha, toh page reload kar do
-                location.reload(); 
+                    // Wapas save kar do usi key mein
+                    localStorage.setItem(key, JSON.stringify(firstMessageOnly));
+                    
+                    console.log("Chat cleared for key: " + key);
+                }
+            } catch (e) {
+                // Agar data JSON nahi hai toh ise skip karo
+                continue;
             }
-        } else {
-            console.log("LocalStorage mein koi chat nahi mili.");
         }
+
+        // 3. Page reload karo taaki screen se sab hat jaye aur naya data load ho
+        location.reload();
     }
 }
+
 </script>
 </body>
 </html>
