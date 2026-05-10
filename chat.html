@@ -862,40 +862,36 @@ document.addEventListener("click", (e) => {
   }
 });
 function handleClearChat() {
-    // 1. WhatsApp jaisa alert
-    const confirmDelete = confirm("⚠️ Warning: Kya aap sach mein chat clear karna chahte hain?\n(AI ka pehla message bacha rahega)");
+    // 1. WhatsApp jaisa Confirmation alert
+    const confirmDelete = confirm("⚠️ Warning: Kya aap sach mein IS chat ko clear karna chahte hain?");
 
     if (confirmDelete) {
-        // 2. LocalStorage mein jitni bhi keys hain unhe check karo
-        for (let i = 0; i < localStorage.length; i++) {
-            let key = localStorage.key(i);
-            let data = localStorage.getItem(key);
+        // 2. Wahi key use karein jo aapne load karne ke liye banayi hai
+        // Note: 'chatType' wahi variable hona chahiye jo abhi active hai
+        let currentKey = `chatHistory_${chatType}`; 
+        
+        let data = localStorage.getItem(currentKey);
 
+        if (data) {
             try {
-                let chatArray = JSON.parse(data);
+                let history = JSON.parse(data);
 
-                // Check karo ki kya ye wahi array hai jisme messages hain
-                if (Array.isArray(chatArray) && chatArray.length > 0) {
-                    
-                    // Logic: Sirf pehla message (index 0) bacha lo
-                    let firstMessageOnly = [chatArray[0]];
+                if (Array.isArray(history) && history.length > 0) {
+                    // 3. Logic: Sirf pehla message (AI ka) bacha lo
+                    let firstMessageOnly = [history[0]];
 
-                    // Wapas save kar do usi key mein
-                    localStorage.setItem(key, JSON.stringify(firstMessageOnly));
+                    // 4. LocalStorage mein wapas save karo (overwrite)
+                    localStorage.setItem(currentKey, JSON.stringify(firstMessageOnly));
                     
-                    console.log("Chat cleared for key: " + key);
+                    // 5. Page reload karein taaki screen saaf ho jaye
+                    location.reload();
                 }
             } catch (e) {
-                // Agar data JSON nahi hai toh ise skip karo
-                continue;
+                console.error("Chat clear karne mein error:", e);
             }
         }
-
-        // 3. Page reload karo taaki screen se sab hat jaye aur naya data load ho
-        location.reload();
     }
 }
-
 </script>
 </body>
 </html>
