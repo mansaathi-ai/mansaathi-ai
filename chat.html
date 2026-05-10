@@ -863,41 +863,33 @@ document.addEventListener("click", (e) => {
 });
 
 function handleClearChat() {
-    // 1. WhatsApp jaisa alert (Warning message ke sath)
-    const warningMessage = "Warning: Kya aap is chat ko clear karna chahte hain?\n\nIsse aapke saare messages delete ho jayenge, lekin AI ka pehla message bacha rahega.";
+    // 1. WhatsApp jaisa Confirmation Alert
+    const confirmDelete = confirm("Warning: Kya aap sach mein saare messages delete karna chahte hain?");
     
-    const userConfirmed = confirm(warningMessage);
+    if (confirmDelete) {
+        // 2. LocalStorage se data uthao (Apni key ka naam check karein, yahan 'chat_history' hai)
+        let storageKey = 'chat_history'; 
+        let data = localStorage.getItem(storageKey);
 
-    // 2. Agar user 'OK' dabaye tabhi delete hoga
-    if (userConfirmed) {
-        try {
-            // LocalStorage se data uthao
-            let savedChat = localStorage.getItem('chat_history');
+        if (data) {
+            let chatArray = JSON.parse(data);
 
-            if (savedChat) {
-                let chatArray = JSON.parse(savedChat);
+            if (chatArray.length > 0) {
+                // 3. LOGIC: Sirf pehla message (Index 0) bacha ke rakho
+                let firstMsg = [chatArray[0]];
 
-                if (chatArray.length > 0) {
-                    // Sirf pehla message (index 0) rakhein
-                    let firstMessageOnly = [chatArray[0]];
+                // 4. LocalStorage mein naya (chhota) array save karo
+                localStorage.setItem(storageKey, JSON.stringify(firstMsg));
 
-                    // LocalStorage update karein (Taki reload par chat wapas na aaye)
-                    localStorage.setItem('chat_history', JSON.stringify(firstMessageOnly));
-
-                    // UI ko refresh karein
-                    // Yahan 'renderChat' ki jagah apne UI function ka naam likhein
-                    renderChat(firstMessageOnly); 
-                }
+                // 5. UI ko turant saaf karke sirf 1st message dikhao
+                // Agar aapka render function kaam nahi kar raha, toh page reload kar do
+                location.reload(); 
             }
-        } catch (error) {
-            console.error("Error clearing chat:", error);
+        } else {
+            console.log("LocalStorage mein koi chat nahi mili.");
         }
-    } else {
-        // Agar user 'Cancel' dabaye toh kuch mat karo
-        console.log("User ne cancel kar diya.");
     }
 }
-
 </script>
 </body>
 </html>
