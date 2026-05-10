@@ -349,7 +349,16 @@ html, body {
   height: 100%;
   overflow: hidden;
 }
-
+<div id="customConfirmModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); align-items: center; justify-content: center;">
+    <div style="background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 320px; text-align: left; margin: 15% auto; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
+        <h3 style="margin: 0 0 12px 0; font-size: 19px; color: #128C7E;">Clear chat?</h3>
+        <p style="margin: 0 0 25px 0; font-size: 15px; color: #444; line-height: 1.4;">Kya aap sach mein is chat ko clear karna chahte hain? AI ka welcome message bacha rahega.</p>
+        <div style="display: flex; justify-content: flex-end; gap: 20px;">
+            <button onclick="closeModal()" style="background: none; border: none; color: #075E54; font-weight: 600; cursor: pointer; font-size: 14px; text-transform: uppercase;">Cancel</button>
+            <button onclick="confirmClear()" style="background: none; border: none; color: #d32f2f; font-weight: 600; cursor: pointer; font-size: 14px; text-transform: uppercase;">Clear Chat</button>
+        </div>
+    </div>
+</div>
 body {
   height: 100dvh;
   display: flex;
@@ -431,16 +440,6 @@ textarea {
 }
 
 }
-<div id="customConfirmModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); align-items: center; justify-content: center;">
-    <div style="background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 320px; text-align: left; margin: 15% auto; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
-        <h3 style="margin: 0 0 12px 0; font-size: 19px; color: #128C7E;">Clear chat?</h3>
-        <p style="margin: 0 0 25px 0; font-size: 15px; color: #444; line-height: 1.4;">Kya aap sach mein is chat ko clear karna chahte hain? AI ka welcome message bacha rahega.</p>
-        <div style="display: flex; justify-content: flex-end; gap: 20px;">
-            <button onclick="closeModal()" style="background: none; border: none; color: #075E54; font-weight: 600; cursor: pointer; font-size: 14px; text-transform: uppercase;">Cancel</button>
-            <button onclick="confirmClear()" style="background: none; border: none; color: #d32f2f; font-weight: 600; cursor: pointer; font-size: 14px; text-transform: uppercase;">Clear Chat</button>
-        </div>
-    </div>
-</div>
   
 </style>
 
