@@ -919,30 +919,7 @@ return;
         }
     }
 }
- function handleClearChat(){
-  document.getElementById("clearPopup").style.display = "flex";
-}
 
-function closePopup(){
-  document.getElementById("clearPopup").style.display = "none";
-}
-
-function confirmClearChat(){
-
-  document.getElementById("clearPopup").style.display = "none";
-
-  let messages =
-  document.querySelectorAll(".aiMsg, .userMsg");
-
-  messages.forEach((msg,index)=>{
-
-    if(index !== 0){
-      msg.remove();
-    }
-
-  });
-
-}
 </script>
 </body>
 </html>
