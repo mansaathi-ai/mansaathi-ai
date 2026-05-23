@@ -501,7 +501,7 @@ textarea {
 <body>
  
 
-<div class="header">
+
 
 <button class="backBtn" onclick="window.location.href='index.html'">← Back</button>
 <button class="newChatBtn" onclick="newChat()"></button>
@@ -822,7 +822,6 @@ location.reload();
 }
 const scrollBtn = document.getElementById("scrollBtn");
 
-chatArea.addEventListener("scroll", () => {
 
   const distance = chatArea.scrollHeight - chatArea.scrollTop - chatArea.clientHeight;
 
