@@ -873,51 +873,7 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
-// 1. Jab user menu se 'Clear Chat' dabayega, toh popup khulega
-function handleClearChat() {
-    if(menuBox) menuBox.classList.remove('show'); // Purane menu ko band karein
-    document.getElementById("clearPopup").style.display = "flex"; // WhatsApp popup dikhayein
-}
 
-// 2. Jab user CANCEL dabayega
-function closeWhatsAppPopup() {
-    document.getElementById("clearPopup").style.display = "none"; // Popup band ho jayega
-}
-
-// 3. Jab user asli me CLEAR CHAT dabayega (Real Delete Logic)
-function executeClearChat() {
-    document.getElementById("clearPopup").style.display = "none"; // Popup band karein
-
-    let currentKey = `chatHistory_${chatType}`;
-    let data = localStorage.getItem(currentKey);
-
-    if (data) {
-        try {
-            let history = JSON.parse(data);
-            if (Array.isArray(history) && history.length > 0) {
-                // [YAHAN ADD HUA]: Pehle message ka data nikal kar safe rakh liya
-                let firstMessageObj = history[0];
-                let firstMessageOnly = [firstMessageObj];
-                
-                // LocalStorage me safe save ho gaya (baaki sab permanently delete)
-                localStorage.setItem(currentKey, JSON.stringify(firstMessageOnly));
-                
-                // Screen saaf karein aur AI ka pehla message wapas daal dein
-                const chatArea = document.getElementById('chatArea');
-                if (chatArea) {
-                    // [YAHAN ADD HUA]: Screen par turant 1st message wapas dikhane ke liye
-                    chatArea.innerHTML = `
-                        <div class="message incoming" style="background-color: #202c33; color: #e9edef; padding: 10px 15px; border-radius: 0px 15px 15px 15px; margin: 10px; max-width: 70%; display: inline-block; font-size: 16px;">
-                            ${firstMessageObj.text || firstMessageObj.message || "Jo dil me hai woh bolo 💬 main yaha hoon."}
-                        </div>
-                    `;
-                }
-            }
-        } catch (e) {
-            console.error("Error clearing chat", e);
-        }
-    }
-}
 </script>
 </body>
 </html>
