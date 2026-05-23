@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ManSaathi Chat</title>
     <style>
-        /* GLOBAL RESET & SMOOTHING */
+        /* GLOBAL RESET */
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
@@ -17,8 +17,7 @@
             overflow: hidden;
             background: #0f172a;
             color: white;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
+            font-family: Arial, sans-serif;
         }
 
         body {
@@ -29,7 +28,7 @@
             background: linear-gradient(135deg, #0f172a, #1e293b);
         }
 
-        /* PREMIUM GLASSMORPHIC HEADER */
+        /* PREMIUM HEADER */
         .header {
             position: relative;
             text-align: center;
@@ -55,7 +54,7 @@
             font-size: 14px;
             padding: 8px 16px;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             z-index: 11;
         }
 
@@ -75,11 +74,10 @@
             font-size: 26px;
             cursor: pointer;
             padding: 5px 10px;
-            transition: opacity 0.2s;
             z-index: 11;
         }
 
-        /* PREMIUM DROPDOWN MENU */
+        /* DROPDOWN MENU */
         .menuBox {
             display: none;
             position: absolute;
@@ -92,8 +90,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             border: 1px solid rgba(255, 255, 255, 0.08);
             overflow: hidden;
-            transform-origin: top right;
-            transition: all 0.2s ease;
         }
 
         .menuBox div {
@@ -108,7 +104,7 @@
             background: #334155;
         }
 
-        /* ANIMATED GLOWING TITLE */
+        /* TITLE & SUBTITLE */
         .title {
             font-size: clamp(26px, 5vw, 34px);
             font-weight: 700;
@@ -134,7 +130,7 @@
             100% { background-position: 200%; }
         }
 
-        /* RESPONSIVE & CLEAN CHAT AREA */
+        /* RESPONSIVE CHAT AREA */
         .chatArea {
             flex: 1;
             overflow-y: auto;
@@ -147,22 +143,20 @@
             padding-bottom: 120px;
             width: 100%;
             scrollbar-width: none;
-            scroll-behavior: smooth;
         }
 
         .chatArea::-webkit-scrollbar {
             display: none;
         }
 
-        /* SMOOTH FLUID MESSAGE BUBBLES */
+        /* MESSAGE BUBBLES */
         .aiMsg, .userMsg {
             padding: 12px 16px;
             max-width: 75%;
             line-height: 1.5;
             word-wrap: break-word;
             font-size: 15px;
-            transform-origin: bottom center;
-            animation: fluidMsg 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeUp 0.25s ease-out forwards;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
@@ -182,7 +176,7 @@
             letter-spacing: 0.1px;
         }
 
-        /* PREMIUM FLOATING INPUT BAR */
+        /* FIXED BOTTOM INPUT CONTAINER */
         .inputContainer {
             position: fixed;
             bottom: 0;
@@ -195,7 +189,7 @@
             z-index: 10;
         }
 
-        /* ORIGINAL RAINBOW BORDER CONTAINER */
+        /* RAINBOW BORDER CONTAINER */
         .chatBox {
             width: 100%;
             padding: 2px;
@@ -251,20 +245,19 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.1s ease;
         }
 
         .sendBtn:active {
             transform: scale(0.85);
-            background: #6ee7d6;
         }
 
-        /* FLOATING SCROLL BUTTON WITHIN CHAT AREA */
+        /* FLOATING SCROLL BUTTON */
         #scrollBtn {
             position: fixed;
             bottom: 100px;
             left: 50%;
-            transform: translateX(-50%) translateY(20px);
+            transform: translateX(-50%);
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -278,18 +271,6 @@
             box-shadow: 0 6px 16px rgba(0,0,0,0.5);
             z-index: 9;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            opacity: 0;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        #scrollBtn.visible {
-            display: flex;
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        #scrollBtn:hover {
-            background: #334155;
         }
 
         #badge {
@@ -305,7 +286,7 @@
             font-weight: bold;
         }
 
-        /* PREMIUM GLASSMORPHIC DIALOG MODAL */
+        /* PREMIUM WHATSAPP DIALOG POPUP */
         .modalOverlay {
             display: none;
             position: fixed;
@@ -319,12 +300,6 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            transition: opacity 0.25s ease;
-        }
-
-        .modalOverlay.active {
-            opacity: 1;
         }
 
         .modalBox {
@@ -336,12 +311,7 @@
             padding: 24px;
             text-align: center;
             box-shadow: 0 24px 48px rgba(0,0,0,0.6);
-            transform: scale(0.85);
-            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .modalOverlay.active .modalBox {
-            transform: scale(1);
+            animation: scaleUp 0.2s ease-out forwards;
         }
 
         .modalBox h3 {
@@ -392,15 +362,20 @@
             background: #dc2626;
         }
 
-        /* ADVANCED CORE ANIMATIONS */
+        /* KEYFRAMES ANIMATIONS */
         @keyframes borderMove {
             0% { background-position: 0% }
             100% { background-position: 400% }
         }
 
-        @keyframes fluidMsg {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleUp {
+            from { transform: scale(0.92); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
@@ -441,6 +416,7 @@
 <div id="scrollBtn">↓ <span id="badge">0</span></div>
 
 <script>
+// Subtitle Text Typer Effect
 const texts = [
     "Share what you feel. I'm here to listen.",
     "A safe space for your thoughts.",
@@ -469,19 +445,203 @@ function typeText(){
 }
 typeText();
 
-// Dynamic Smooth Auto Grow Textarea
+// Textarea Auto-grow Handler
 let textarea = document.getElementById("userInput");
 textarea.addEventListener("input", () => {
     textarea.style.height = "auto";
     textarea.style.height = textarea.scrollHeight + "px";
 });
 
-// Chat Configurations Setup
+// Chat Sessions & Keys Configuration
 const chatType = sessionStorage.getItem("chatType") || "default";
 let chatHistoryKey = `chatHistory_${chatType}`;
 
 const chatConfig = {
-    happy_fun:
+    happy_fun: { firstMessage: "Hey 😄 aaj thoda fun karte hain. Tum kya dekhna ya baat karna chahte ho?" },
+    happy_affirm: { firstMessage: "Aaj positivity ko aur strong banate hain ✨ ek achchi si baat share karo." },
+    happy_energy: { firstMessage: "Awesome ⚡ chalo aaj energy ko action me badalte hain. Kya karna chahte ho?" },
+    happy_music: { firstMessage: "Nice 🎵 aaj ka mood musical hai. Tumhe kis type ka music pasand hai?" },
+    sad_relax: { firstMessage: "Main yaha hoon 🤍 pehle aaram se saans lo. Kya tum thoda share karna chahoge?" },
+    sad_healing: { firstMessage: "Koi baat nahi, aaram se bolo 🌿 jo feel ho raha hai, main sun raha hoon." },
+    sad_calm: { firstMessage: "Chalo thoda calm hote hain 🎶 tumhe abhi sabse zyada kis cheez ki zarurat lag rahi hai?" },
+    sad_quotes: { firstMessage: "Kabhi kabhi ek achchi line bhi dil ko halka kar deti hai 📝 tum kya feel kar rahe ho?" },
+    love_quotes: { firstMessage: "Love is in the air ❤️ kya tum romantic quotes chahte ho ya kisi special ke liye message?" },
+    love_guidance: { firstMessage: "Chalo relationship ko better banane ki baat karte hain 🤝 kya confusion hai?" },
+    love_confidence: { firstMessage: "Confidence attractive hoti hai 🔥 tum kis situation me confident banna chahte ho?" },
+    love_motivation: { firstMessage: "Dil ko halka aur strong dono rakhte hain 😊 aaj tumhe kis type ki positivity chahiye?" },
+    breakup_healing: { firstMessage: "Heartbreak tough hota hai 💔 lekin tum akela nahi ho. Jo feel ho raha hai bata sakte ho." },
+    breakup_moveon: { firstMessage: "Aaj ek step aage badhte hain 🌸 chhota hi sahi. Sabse zyada kis baat se hurt ho?" },
+    breakup_growth: { firstMessage: "Pain ko growth me badalna possible hai 🌱 chalo dheere dheere start karte hain." },
+    breakup_mindset: { hisstMessage: "Tum soch se zyada strong ho 🧠 chalo mind ko stable banate hain." },
+    motivation_daily: { firstMessage: "Let's go 🚀 aaj ka target kya hai?" },
+    motivation_study: { firstMessage: "Focus mode on 🎯 aaj kis subject ya kaam par dhyan dena hai?" },
+    motivation_success: { firstMessage: "Badi growth chhote disciplined steps se aati hai 📈 tumhara goal kya hai?" },
+    motivational_mental: { firstMessage: "Strong mind, stable life 🧘 aaj tum apne aap ko kaise better banana chahte ho?" },
+    auto_mood: { firstMessage: "Bas normal baat karo 🤖 main tumhare mood ko samajhne ki koshish karunga." },
+    free_chat: { firstMessage: "Jo dil me hai woh bolo 💬 main yaha hoon." }
+};
 
+const chatArea = document.getElementById("chatArea");
+
+// Core Loader Engine (Load and Display Storage Safely)
+function loadChatScreen() {
+    chatArea.innerHTML = "";
+    let history = [];
+    
+    try {
+        let stored = localStorage.getItem(chatHistoryKey);
+        if(stored) {
+            history = JSON.parse(stored);
+        }
+    } catch(e) {
+        console.error("History parse error", e);
+    }
+    
+    // Default system boot if history array is empty
+    if(!Array.isArray(history) || history.length === 0){
+        const firstMsg = chatConfig[chatType]?.firstMessage || "Hey 👋 main yaha hoon. Aaj tum kaise feel kar rahe ho?";
+        history = [{type: "ai", text: firstMsg}];
+        localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+    }
+    
+    // Append divs dynamically
+    history.forEach(msg => {
+        let div = document.createElement("div");
+        div.className = msg.type === "user" ? "userMsg" : "aiMsg";
+        div.innerText = msg.text;
+        chatArea.appendChild(div);
+    });
+    
+    // Handle Auto-Scroll positioning
+    setTimeout(() => {
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }, 50);
+}
+
+// Initializing Engine Boot
+loadChatScreen();
+
+// Messaging Handler Dispatch System
+function sendMessage() {
+    let text = textarea.value.trim();
+    if(text === "") return;
+
+    // 1. Render User Message Node
+    let userDiv = document.createElement("div");
+    userDiv.className = "userMsg";
+    userDiv.innerText = text;
+    chatArea.appendChild(userDiv);
+
+    // Save To Storage Array
+    let history = JSON.parse(localStorage.getItem(chatHistoryKey)) || [];
+    history.push({type: "user", text: text});
+    localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+
+    textarea.value = "";
+    textarea.style.height = "auto";
+    chatArea.scrollTop = chatArea.scrollHeight;
+
+    // 2. Render Temporary AI Typing State
+    let typingDiv = document.createElement("div");
+    typingDiv.className = "aiMsg";
+    typingDiv.innerText = "ManSaathi is Typing...";
+    chatArea.appendChild(typingDiv);
+    chatArea.scrollTop = chatArea.scrollHeight;
+
+    // 3. Simulated Async AI Reply Promise Execution
+    setTimeout(() => {
+        typingDiv.remove();
+        let aiText = "Main samajh raha hoon… agar chaho to aur share kar sakte ho.";
+        let aiDiv = document.createElement("div");
+        aiDiv.className = "aiMsg";
+        aiDiv.innerText = aiText;
+        chatArea.appendChild(aiDiv);
+
+        // Commit AI msg block to stack
+        history.push({type: "ai", text: aiText});
+        localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+        
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }, 1200);
+}
+
+// Attach IO triggers
+document.getElementById("sendBtnButton").onclick = sendMessage;
+textarea.addEventListener("keypress", function(e){
+    if(e.key === "Enter" && !e.shiftKey){
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+// App Nav Redirection
+function goBack(){
+    localStorage.setItem("lastScreen", "mood");
+    window.location.href = "index.html";
+}
+
+// Modal Windows Control Layers
+const clearModal = document.getElementById("clearModal");
+const menuBox = document.getElementById("menuBox");
+const menuBtn = document.getElementById("menuBtn");
+
+function openClearModal() {
+    menuBox.style.display = "none";
+    clearModal.style.display = "flex";
+}
+
+function closeClearModal() {
+    clearModal.style.display = "none";
+}
+
+function executeClearChat() {
+    try {
+        let history = JSON.parse(localStorage.getItem(chatHistoryKey)) || [];
+        if (history.length > 0) {
+            // Secure 1st AI greeting message block safely
+            let firstMsgOnly = [history[0]];
+            localStorage.setItem(chatHistoryKey, JSON.stringify(firstMsgOnly));
+        }
+    } catch (err) {
+        console.error(err);
+    }
+    closeClearModal();
+    // Live UI rebuild engine
+    loadChatScreen();
+}
+
+// Header Dynamic Dropdown Controller Menu
+menuBtn.onclick = (e) => {
+    e.stopPropagation();
+    menuBox.style.display = (menuBox.style.display === "block") ? "none" : "block";
+};
+
+document.addEventListener("click", (e) => {
+    if (!menuBtn.contains(e.target) && !menuBox.contains(e.target)) {
+        menuBox.style.display = "none";
+    }
+});
+
+// Scroll to Bottom Controls Engine Layout Anchor
+const scrollBtn = document.getElementById("scrollBtn");
+chatArea.addEventListener("scroll", () => {
+    const distance = chatArea.scrollHeight - chatArea.scrollTop - chatArea.clientHeight;
+    if (distance > 180) {
+        scrollBtn.style.display = "flex";
+    } else {
+        scrollBtn.style.display = "none";
+    }
+});
+
+scrollBtn.onclick = () => {
+    chatArea.scrollTo({
+        top: chatArea.scrollHeight,
+        behavior: "smooth"
+    });
+};
+</script>
+
+</body>
+</html>
        
        
