@@ -866,7 +866,7 @@ document.addEventListener("click", (e) => {
 function handleClearChat() {
     // 1. WhatsApp jaisa Confirmation alert
     document.getElementById("clearPopup").style.display = "flex";
-return;
+
 
     if (confirmDelete) {
         // 2. Wahi key use karein jo aapne load karne ke liye banayi hai
@@ -895,7 +895,42 @@ return;
         }
     }
 }
+function confirmClearChat(){
 
+let currentKey = `chatHistory_${chatType}`;
+
+let data = localStorage.getItem(currentKey);
+
+if(data){
+
+try{
+
+let history = JSON.parse(data);
+
+if(Array.isArray(history) && history.length > 0){
+
+let firstMessageOnly = [history[0]];
+
+localStorage.setItem(
+currentKey,
+JSON.stringify(firstMessageOnly)
+);
+
+location.reload();
+
+}
+
+}catch(e){
+
+console.error(e);
+
+}
+
+}
+
+document.getElementById("clearPopup").style.display = "none";
+
+}
 </script>
 </body>
 </html>
