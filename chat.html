@@ -1,47 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
- 
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ManSaathi Chat</title>
- 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
- #menuBtn {
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 22px;
-  cursor: pointer;
-}
 
-.menuBox {
-  display: none;
-  position: absolute;
-  right: 10px;
-  top: 55px;
-  background: #1e293b;
-  border-radius: 12px;
-  min-width: 150px;
-  z-index: 100;
- box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-
-.menuBox div {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.menuBox div:hover {
-  background: #334155;
-}
-h1 {
-  font-size: clamp(28px, 6vw, 60px);
-}
 body{
 margin:0;
 background:linear-gradient(135deg,#0f172a,#1e293b);
@@ -66,6 +31,13 @@ padding-top:60px;
 
 position:absolute;
 left:20px;
+top:25px;
+
+display:flex;
+align-items:center;
+gap:6px;
+
+padding:8px 14px;
 
 border-radius:20px;
 border:none;
@@ -154,9 +126,9 @@ display:none;
 .userMsg{
 
 padding:12px 16px;
-max-width: 60%;
+max-width: 55%;
 
-line-height:1.3;
+line-height:1.4;
 
 word-wrap:break-word;
 
@@ -196,7 +168,7 @@ align-self:flex-end;
 
 .inputContainer{
 
-padding:5px;
+padding:20px;
 
 max-width:700px;
 
@@ -249,7 +221,7 @@ align-items:center;
 
 gap:10px;
 
-padding:8px 18px;
+padding:14px 18px;
 
 box-sizing:border-box;
 
@@ -338,107 +310,13 @@ transform:translateY(0);
 
 100%{background-position:200%}
 
-} 
-/* GLOBAL RESET */
-* {
-  box-sizing: border-box;
 }
 
-html, body {
-  margin: 0;
-  height: 100%;
-  overflow: hidden;
-}
-
-body {
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  background: #0f172a;
-  color: white;
-  font-family: Arial;
-}
-
-/* HEADER */
-.header {
-  position: relative;
-  text-align: center;
-  padding: 30px;
-}
-
-/* CHAT AREA */
-.chatArea {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 10px;
-  padding-bottom: 100px;
-}
-
-/* MESSAGES */
-.aiMsg, .userMsg {
-  max-width: 75%;
-  padding: 10px 14px;
-  border-radius: 18px;
-  font-size: 16px;
-}
-
-.aiMsg {
-  background: #2c3e50;
-}
-
-.userMsg {
-  background: #6ee7d6;
-  color: black;
-  align-self: flex-end;
-}
-
-/* INPUT */
-.inputContainer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: #0f172a;
-  padding:  8px;
-}
-
-.inputArea {
-  background: #1e293b;
-  border-radius: 25px;
-  display: flex;
-  align-items: center;
-  padding: 6px 10px;
-}
-
-textarea {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: white;
-  font-size: 16px;
-}
-
-.sendBtn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #22d3ee;
-  border: none;
-}
-
-}
-
-}
 </style>
 
 </head>
+
 <style>
-</style
-  
   .userMsg {
   font-size: 15px;
   font-weight: 500;      /* हल्का bold = clean */
@@ -462,7 +340,7 @@ textarea {
 }
 #scrollBtn {
   position: fixed;
-  bottom: 85px;
+  bottom: 120px;
 
   left: 50%;
   transform: translateX(-50%);
@@ -496,26 +374,24 @@ textarea {
 
   display: none;
 }
-
 </style>
 <body>
- 
+<div id="scrollBtn">
+  ↓
+  <span id="badge">0</span>
+</div>
 
-
+<div class="header">
 
 <button class="backBtn" onclick="window.location.href='index.html'">← Back</button>
-<button class="newChatBtn" onclick="newChat()"></button>
+<button class="newChatBtn" onclick="newChat()">＋ New</button>
 
 <div class="title">ManSaathi</div>
 
 <div class="subtitle" id="subtitle">
 
-</div><button id="menuBtn">⋮</button>
-
-<div id="menuBox" class="menuBox">
-  <div onclick="handleClearChat()">Clear Chat</div>
 </div>
-<
+
 </div>
 
 <div class="chatArea" id="chatArea">
@@ -625,7 +501,7 @@ let typing=document.createElement("div");
 
 typing.className="aiMsg";
 
-typing.innerText="ManSaathi is Typing...";
+typing.innerText="Typing...";
 
 chat.appendChild(typing);
 
@@ -639,11 +515,7 @@ typing.remove();
 
 let ai=document.createElement("div");
 
-if(chat.children.length === 0){
-   ai.className = "aiMsg permanentMessage";
-}else{
-   ai.className = "aiMsg";
-}
+ai.className="aiMsg";
 
 ai.innerText="Main samajh raha hoon… agar chaho to aur share kar sakte ho.";
 
@@ -822,6 +694,7 @@ location.reload();
 }
 const scrollBtn = document.getElementById("scrollBtn");
 
+chatArea.addEventListener("scroll", () => {
 
   const distance = chatArea.scrollHeight - chatArea.scrollTop - chatArea.clientHeight;
 
@@ -840,24 +713,8 @@ scrollBtn.onclick = () => {
   });
 };
 
- 
- const menuBtn = document.getElementById("menuBtn");
-const menuBox = document.getElementById("menuBox");
-
-menuBtn.onclick = () => {
-  if (menuBox.style.display === "block") {
-    menuBox.style.display = "none";
-  } else {
-    menuBox.style.display = "block";
-  }
-};
-
-document.addEventListener("click", (e) => {
-  if (!menuBtn.contains(e.target) && !menuBox.contains(e.target)) {
-    menuBox.style.display = "none";
-  }
-});
-
 </script>
+
 </body>
+
 </html>
