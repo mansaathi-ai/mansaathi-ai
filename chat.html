@@ -873,20 +873,10 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
-// 1. Jab user menu se 'Clear Chat' dabayega, toh popup khulega
-function handleClearChat() {
-    if(menuBox) menuBox.classList.remove('show'); // Purane menu ko band karein
-    document.getElementById("clearPopup").style.display = "flex"; // WhatsApp popup dikhayein
-}
-
-// 2. Jab user CANCEL dabayega
-function closeWhatsAppPopup() {
-    document.getElementById("clearPopup").style.display = "none"; // Popup band ho jayega
-}
-
-// 3. Jab user asli me CLEAR CHAT dabayega (Real Delete Logic)
 function executeClearChat() {
-    document.getElementById("clearPopup").style.display = "none"; // Popup band karein
+    if(document.getElementById("clearPopup")) {
+        document.getElementById("clearPopup").style.display = "none"; // Popup band karein
+    }
 
     let currentKey = `chatHistory_${chatType}`;
     let data = localStorage.getItem(currentKey);
@@ -895,14 +885,31 @@ function executeClearChat() {
         try {
             let history = JSON.parse(data);
             if (Array.isArray(history) && history.length > 0) {
-                // Sirf pehla message bacha lo
-                let firstMessageOnly = [history[0]];
+                // 1. LocalStorage me sirf pehla message bacha lo
+                let firstMessageObj = history[0]; 
+                let firstMessageOnly = [firstMessageObj];
                 localStorage.setItem(currentKey, JSON.stringify(firstMessageOnly));
                 
-                // Screen saaf karein
+                // 2. Screen ko pehle khali karein
                 const chatArea = document.getElementById('chatArea');
                 if (chatArea) {
                     chatArea.innerHTML = ""; 
+
+                    // 3. AB SABSE IMPORTANT: AI ka pehla message screen par wapas dikhayein
+                    // (Yahan aapke code ke hisab se div ka design badal sakte hain agar zarurat ho)
+                    let firstMsgHTML = `
+                        <div class="message incoming">
+                            <div class="bubble">${firstMessageObj.text || firstMessageObj.message || "Jo dil me hai woh bolo 💬 main yaha hoon."}</div>
+                        </div>
+                    `;
+                    
+                    // Agar aapki message class alag hai (jaise pehle photo me thi), toh wahi class use karein:
+                    // Jaise aapki screen par abhi message dikh raha hai, waisa div banayein:
+                    chatArea.innerHTML = `
+                        <div style="background-color: #202c33; color: #e9edef; padding: 10px 15px; border-radius: 0px 15px 15px 15px; margin: 10px; max-width: 70%; display: inline-block; font-size: 16px;">
+                            ${firstMessageObj.text || firstMessageObj.message || "Jo dil me hai woh bolo 💬 main yaha hoon."}
+                        </div>
+                    `;
                 }
             }
         } catch (e) {
