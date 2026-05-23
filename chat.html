@@ -437,42 +437,6 @@ textarea {
 
 </head>
 <style>
-    /* Three dots button ka style */
-    .three-dots {
-        background: none;
-        border: none;
-        font-size: 26px;
-        cursor: pointer;
-        color: #54656f;
-    }
-
-    /* Dropdown box ka style */
-    .menuBox {
-        display: none; /* Shuru me chhupane ke liye */
-        position: absolute;
-        right: 10px;
-        background-color: white;
-        min-width: 130px;
-        box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
-        border-radius: 8px;
-        z-index: 100;
-        cursor: pointer;
-    }
-
-    .menuBox div {
-        padding: 10px 15px;
-        color: black;
-        font-size: 15px;
-    }
-
-    .menuBox div:hover {
-        background-color: #f5f6f6;
-    }
-
-    /* Jab menu dikhana ho tab ye class kaam karegi */
-    .show {
-        display: block !important;
-    }
 </style
   
   .userMsg {
@@ -552,11 +516,21 @@ textarea {
 <div class="subtitle" id="subtitle">
 
 </div><button id="menuBtn">⋮</button>
-<button id="menuBtn" class="three-dots">&#8942;</button>
+
 <div id="menuBox" class="menuBox">
   <div onclick="handleClearChat()">Clear Chat</div>
 </div>
-
+<div id="clearPopup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 24px; border-radius: 16px; width: 85%; max-width: 320px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); font-family: Arial, sans-serif;">
+        <h3 style="margin: 0 0 12px 0; font-size: 18px; color: #111b21; font-weight: 500;">Clear this chat?</h3>
+        <p style="margin: 0 0 24px 0; font-size: 14px; color: #667781; line-height: 20px;">Kya aap sach me is chat ke saare messages delete karna chahte hain?</p>
+        <div style="display: flex; justify-content: flex-end; gap: 16px;">
+            <button onclick="closeWhatsAppPopup()" style="background: none; border: none; color: #00a884; font-size: 14px; font-weight: 600; cursor: pointer; padding: 8px;">CANCEL</button>
+            <button onclick="executeClearChat()" style="background: none; border: none; color: #00a884; font-size: 14px; font-weight: 600; cursor: pointer; padding: 8px;">CLEAR CHAT</button>
+        </div>
+    </div>
+</div>
+ 
 </div>
 
 <div class="chatArea" id="chatArea">
@@ -899,41 +873,43 @@ document.addEventListener("click", (e) => {
     menuBox.style.display = "none";
   }
 });
+// 1. Jab user menu se 'Clear Chat' dabayega, toh popup khulega
 function handleClearChat() {
-    // Browser ka inbuilt WhatsApp jaisa OK aur Cancel pop-up
-    let confirmDelete = confirm("Kya aap sach me chat clear karna chahte hain?");
+    if(menuBox) menuBox.classList.remove('show'); // Purane menu ko band karein
+    document.getElementById("clearPopup").style.display = "flex"; // WhatsApp popup dikhayein
+}
 
-    if (confirmDelete) {
-        // Wahi key use karein jo aapne load karne ke liye banayi hai
-        let currentKey = `chatHistory_${chatType}`;
-        let data = localStorage.getItem(currentKey);
+// 2. Jab user CANCEL dabayega
+function closeWhatsAppPopup() {
+    document.getElementById("clearPopup").style.display = "none"; // Popup band ho jayega
+}
 
-        if (data) {
-            try {
-                let history = JSON.parse(data);
+// 3. Jab user asli me CLEAR CHAT dabayega (Real Delete Logic)
+function executeClearChat() {
+    document.getElementById("clearPopup").style.display = "none"; // Popup band karein
 
-                if (Array.isArray(history) && history.length > 0) {
-                    // Logic: Sirf pehla message (AI ka) bacha lo
-                    let firstMessageOnly = [history[0]];
+    let currentKey = `chatHistory_${chatType}`;
+    let data = localStorage.getItem(currentKey);
 
-                    // LocalStorage mein wapas save karo (overwrite)
-                    localStorage.setItem(currentKey, JSON.stringify(firstMessageOnly));
-                    
-                    // UI ko refresh karne ke liye screen se purane messages hatao
-                    const chatArea = document.getElementById('chatArea');
-                    if (chatArea) {
-                        chatArea.innerHTML = ""; // Screen khali karega
-                    }
-
-                    alert("Chat clear ho gayi!");
+    if (data) {
+        try {
+            let history = JSON.parse(data);
+            if (Array.isArray(history) && history.length > 0) {
+                // Sirf pehla message bacha lo
+                let firstMessageOnly = [history[0]];
+                localStorage.setItem(currentKey, JSON.stringify(firstMessageOnly));
+                
+                // Screen saaf karein
+                const chatArea = document.getElementById('chatArea');
+                if (chatArea) {
+                    chatArea.innerHTML = ""; 
                 }
-            } catch (e) {
-                console.error("Error parsing chat history", e);
             }
+        } catch (e) {
+            console.error("Error clearing chat", e);
         }
     }
 }
-
 </script>
 </body>
 </html>
