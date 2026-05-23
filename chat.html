@@ -436,8 +436,44 @@ textarea {
 </style>
 
 </head>
-
 <style>
+    /* Three dots button ka style */
+    .three-dots {
+        background: none;
+        border: none;
+        font-size: 26px;
+        cursor: pointer;
+        color: #54656f;
+    }
+
+    /* Dropdown box ka style */
+    .menuBox {
+        display: none; /* Shuru me chhupane ke liye */
+        position: absolute;
+        right: 10px;
+        background-color: white;
+        min-width: 130px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+        border-radius: 8px;
+        z-index: 100;
+        cursor: pointer;
+    }
+
+    .menuBox div {
+        padding: 10px 15px;
+        color: black;
+        font-size: 15px;
+    }
+
+    .menuBox div:hover {
+        background-color: #f5f6f6;
+    }
+
+    /* Jab menu dikhana ho tab ye class kaam karegi */
+    .show {
+        display: block !important;
+    }
+</style
   
   .userMsg {
   font-size: 15px;
@@ -516,7 +552,7 @@ textarea {
 <div class="subtitle" id="subtitle">
 
 </div><button id="menuBtn">⋮</button>
-
+<button id="menuBtn" class="three-dots">&#8942;</button>
 <div id="menuBox" class="menuBox">
   <div onclick="handleClearChat()">Clear Chat</div>
 </div>
@@ -864,15 +900,12 @@ document.addEventListener("click", (e) => {
   }
 });
 function handleClearChat() {
-    // 1. WhatsApp jaisa Confirmation alert
-    document.getElementById("clearPopup").style.display = "flex";
-
+    // Browser ka inbuilt WhatsApp jaisa OK aur Cancel pop-up
+    let confirmDelete = confirm("Kya aap sach me chat clear karna chahte hain?");
 
     if (confirmDelete) {
-        // 2. Wahi key use karein jo aapne load karne ke liye banayi hai
-        // Note: 'chatType' wahi variable hona chahiye jo abhi active hai
-        let currentKey = `chatHistory_${chatType}`; 
-        
+        // Wahi key use karein jo aapne load karne ke liye banayi hai
+        let currentKey = `chatHistory_${chatType}`;
         let data = localStorage.getItem(currentKey);
 
         if (data) {
@@ -880,57 +913,27 @@ function handleClearChat() {
                 let history = JSON.parse(data);
 
                 if (Array.isArray(history) && history.length > 0) {
-                    // 3. Logic: Sirf pehla message (AI ka) bacha lo
+                    // Logic: Sirf pehla message (AI ka) bacha lo
                     let firstMessageOnly = [history[0]];
 
-                    // 4. LocalStorage mein wapas save karo (overwrite)
+                    // LocalStorage mein wapas save karo (overwrite)
                     localStorage.setItem(currentKey, JSON.stringify(firstMessageOnly));
                     
-                    // 5. Page reload karein taaki screen saaf ho jaye
-                    location.reload();
+                    // UI ko refresh karne ke liye screen se purane messages hatao
+                    const chatArea = document.getElementById('chatArea');
+                    if (chatArea) {
+                        chatArea.innerHTML = ""; // Screen khali karega
+                    }
+
+                    alert("Chat clear ho gayi!");
                 }
             } catch (e) {
-                console.error("Chat clear karne mein error:", e);
+                console.error("Error parsing chat history", e);
             }
         }
     }
 }
-function confirmClearChat(){
 
-let currentKey = `chatHistory_${chatType}`;
-
-let data = localStorage.getItem(currentKey);
-
-if(data){
-
-try{
-
-let history = JSON.parse(data);
-
-if(Array.isArray(history) && history.length > 0){
-
-let firstMessageOnly = [history[0]];
-
-localStorage.setItem(
-currentKey,
-JSON.stringify(firstMessageOnly)
-);
-
-location.reload();
-
-}
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-document.getElementById("clearPopup").style.display = "none";
-
-}
 </script>
 </body>
 </html>
