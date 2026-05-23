@@ -4,17 +4,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ManSaathi Chat</title>
     <style>
-        /* GLOBAL RESET & SMOOTHING */
+        /* GLOBAL RESET & FIXES */
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
         }
 
         html, body {
-            margin: 0;
-            padding: 0;
             height: 100%;
-            overflow: hidden;
             background: #0f172a;
             color: white;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -24,8 +23,6 @@
         body {
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            height: 100dvh;
             background: linear-gradient(135deg, #0f172a, #1e293b);
         }
 
@@ -36,10 +33,9 @@
             padding: 16px;
             padding-top: 35px;
             flex-shrink: 0;
-            background: rgba(15, 23, 42, 0.4);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             z-index: 10;
         }
 
@@ -50,18 +46,37 @@
             top: 32px;
             border-radius: 20px;
             border: none;
-            background: rgba(255, 255, 255, 0.07);
+            background: rgba(255, 255, 255, 0.08);
             color: white;
             font-size: 14px;
             padding: 8px 16px;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             z-index: 11;
         }
 
         .backBtn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        /* NEW CHAT BUTTON */
+        .newChatBtn {
+            position: absolute;
+            left: 115px;
+            top: 32px;
+            border-radius: 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            font-size: 14px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 11;
+        }
+
+        .newChatBtn:hover {
+            background: rgba(255, 255, 255, 0.25);
         }
 
         /* THREE DOTS MENU BUTTON */
@@ -75,11 +90,10 @@
             font-size: 26px;
             cursor: pointer;
             padding: 5px 10px;
-            transition: opacity 0.2s;
             z-index: 11;
         }
 
-        /* PREMIUM DROPDOWN MENU */
+        /* DROPDOWN MENU */
         .menuBox {
             display: none;
             position: absolute;
@@ -92,8 +106,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             border: 1px solid rgba(255, 255, 255, 0.08);
             overflow: hidden;
-            transform-origin: top right;
-            transition: all 0.2s ease;
         }
 
         .menuBox div {
@@ -108,7 +120,7 @@
             background: #334155;
         }
 
-        /* ANIMATED GLOWING TITLE */
+        /* TITLE & SUBTITLE */
         .title {
             font-size: clamp(26px, 5vw, 34px);
             font-weight: 700;
@@ -134,7 +146,7 @@
             100% { background-position: 200%; }
         }
 
-        /* RESPONSIVE & CLEAN CHAT AREA */
+        /* CHAT AREA CONTAINER */
         .chatArea {
             flex: 1;
             overflow-y: auto;
@@ -144,26 +156,25 @@
             max-width: 680px;
             margin: 0 auto;
             padding: 20px;
-            padding-bottom: 120px;
+            padding-bottom: 100px;
             width: 100%;
             scrollbar-width: none;
-            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
         }
 
         .chatArea::-webkit-scrollbar {
             display: none;
         }
 
-        /* SMOOTH FLUID MESSAGE BUBBLES */
+        /* MESSAGE BUBBLES WITH ANIMATION */
         .aiMsg, .userMsg {
             padding: 12px 16px;
             max-width: 75%;
             line-height: 1.5;
             word-wrap: break-word;
             font-size: 15px;
-            transform-origin: bottom center;
-            animation: fluidMsg 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            animation: fluidMsg 0.25s ease-out forwards;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         .aiMsg {
@@ -179,23 +190,23 @@
             border-radius: 16px 16px 4px 16px;
             align-self: flex-end;
             font-weight: 500;
-            letter-spacing: 0.1px;
         }
 
-        /* PREMIUM FLOATING INPUT BAR */
+        /* STICKY BOTTOM INPUT CONTAINER (FIXED FREEZE ISSUE) */
         .inputContainer {
-            position: fixed;
+            position: sticky;
             bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 15px 20px 20px 20px;
+            margin-top: auto;
+            padding: 12px 16px 20px 16px;
             max-width: 680px;
             width: 100%;
+            margin-left: auto;
+            margin-right: auto;
             background: transparent;
             z-index: 10;
         }
 
-        /* ORIGINAL RAINBOW BORDER CONTAINER */
+        /* GRADIENT CONTAINER RING */
         .chatBox {
             width: 100%;
             padding: 2px;
@@ -203,10 +214,10 @@
             background: linear-gradient(90deg, #00f5ff, #00ff9d, #ffd000, #ff00ea, #00f5ff);
             background-size: 400%;
             animation: borderMove 7s linear infinite;
-            box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.45);
         }
 
-        /* INNER CONTAINER */
+        /* CHAT INPUT AREA */
         .inputArea {
             width: 100%;
             background: #1e293b;
@@ -251,61 +262,14 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.1s ease;
         }
 
         .sendBtn:active {
             transform: scale(0.85);
-            background: #6ee7d6;
         }
 
-        /* FLOATING SCROLL BUTTON WITHIN CHAT AREA */
-        #scrollBtn {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #1e293b;
-            color: #22d3ee;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 16px;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.5);
-            z-index: 9;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            opacity: 0;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        #scrollBtn.visible {
-            display: flex;
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        #scrollBtn:hover {
-            background: #334155;
-        }
-
-        #badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: #22c55e;
-            color: #000;
-            font-size: 10px;
-            padding: 1px 5px;
-            border-radius: 10px;
-            display: none;
-            font-weight: bold;
-        }
-
-        /* PREMIUM GLASSMORPHIC DIALOG MODAL */
+        /* WHATSAPP MODAL POPUP */
         .modalOverlay {
             display: none;
             position: fixed;
@@ -313,18 +277,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.4);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            transition: opacity 0.25s ease;
-        }
-
-        .modalOverlay.active {
-            opacity: 1;
         }
 
         .modalBox {
@@ -336,12 +294,6 @@
             padding: 24px;
             text-align: center;
             box-shadow: 0 24px 48px rgba(0,0,0,0.6);
-            transform: scale(0.85);
-            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .modalOverlay.active .modalBox {
-            transform: scale(1);
         }
 
         .modalBox h3 {
@@ -370,7 +322,6 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s ease;
         }
 
         .modalBtn.cancel {
@@ -378,29 +329,20 @@
             color: #94a3b8;
         }
 
-        .modalBtn.cancel:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-        }
-
         .modalBtn.clear {
             background: #ef4444;
             color: white;
         }
 
-        .modalBtn.clear:hover {
-            background: #dc2626;
-        }
-
-        /* ADVANCED CORE ANIMATIONS */
+        /* TIMING KEYFRAMES ANIMATIONS */
         @keyframes borderMove {
             0% { background-position: 0% }
             100% { background-position: 400% }
         }
 
         @keyframes fluidMsg {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -419,6 +361,7 @@
 
 <div class="header">
     <button class="backBtn" onclick="goBack()">← Back</button>
+    <button class="newChatBtn" onclick="newChat()">+ New</button>
     <div class="title">ManSaathi</div>
     <div class="subtitle" id="subtitle"></div>
     <button id="menuBtn">⋮</button>
@@ -438,9 +381,8 @@
     </div>
 </div>
 
-<div id="scrollBtn">↓ <span id="badge">0</span></div>
-
 <script>
+// Subtitle Text Typer Effect Engine
 const texts = [
     "Share what you feel. I'm here to listen.",
     "A safe space for your thoughts.",
@@ -454,6 +396,7 @@ let charIndex = 0;
 const subtitleEl = document.getElementById("subtitle");
 
 function typeText(){
+    if(!subtitleEl) return;
     if(charIndex < texts[textIndex].length){
         subtitleEl.innerHTML += texts[textIndex].charAt(charIndex);
         charIndex++;
@@ -469,16 +412,175 @@ function typeText(){
 }
 typeText();
 
-// Dynamic Smooth Auto Grow Textarea
+// Textarea Auto-grow Box Handler
 let textarea = document.getElementById("userInput");
 textarea.addEventListener("input", () => {
     textarea.style.height = "auto";
     textarea.style.height = textarea.scrollHeight + "px";
 });
 
-// Chat Configurations Setup
+// Session Keys Config Object
 const chatType = sessionStorage.getItem("chatType") || "default";
 let chatHistoryKey = `chatHistory_${chatType}`;
 
 const chatConfig = {
-    happy_fun:
+    default: { firstMessage: "Hey 👋 main yaha hoon. Aaj tum kaise feel kar rahe ho?" },
+    happy_fun: { firstMessage: "Hey 😄 aaj thoda fun karte hain. Tum kya dekhna ya baat karna chahte ho?" },
+    happy_affirm: { firstMessage: "Aaj positivity ko aur strong banate hain ✨ ek achchi si baat share karo." },
+    happy_energy: { firstMessage: "Awesome ⚡ chalo aaj energy ko action me badalte hain. Kya karna chahte ho?" },
+    happy_music: { firstMessage: "Nice 🎵 aaj ka mood musical hai. Tumhe kis type ka music pasand hai?" },
+    sad_relax: { firstMessage: "Main yaha hoon 🤍 pehle aaram se saans lo. Kya tum thoda share karna chahoge?" },
+    sad_healing: { firstMessage: "Koi baat nahi, aaram se bolo 🌿 jo feel ho raha hai, main sun raha hoon." },
+    sad_calm: { firstMessage: "Chalo thoda calm hote hain 🎶 tumhe abhi sabse zyada kis cheez ki zarurat lag rahi hai?" },
+    sad_quotes: { firstMessage: "Kabhi kabhi ek achchi line bhi dil ko halka kar deti hai 📝 tum kya feel kar rahe ho?" },
+    love_quotes: { firstMessage: "Love is in the air ❤️ kya tum romantic quotes chahte ho ya kisi special ke liye message?" },
+    love_guidance: { firstMessage: "Chalo relationship ko better banane ki baat karte hain 🤝 kya confusion hai?" },
+    love_confidence: { firstMessage: "Confidence attractive hoti hai 🔥 tum kis situation me confident banna chahte ho?" },
+    love_motivation: { firstMessage: "Dil ko halka aur strong dono rakhte hain 😊 aaj tumhe kis type ki positivity chahiye?" },
+    breakup_healing: { firstMessage: "Heartbreak tough hota hai 💔 lekin tum akela nahi ho. Jo feel ho raha hai bata sakte ho." },
+    breakup_moveon: { firstMessage: "Aaj ek step aage badhte hain 🌸 chhota hi sahi. Sabse zyada kis baat se hurt ho?" },
+    breakup_growth: { firstMessage: "Pain ko growth me badalna possible hai 🌱 chalo dheere dideere start karte hain." },
+    breakup_mindset: { firstMessage: "Tum soch se zyada strong ho 🧠 chalo mind ko stable banate hain." },
+    motivation_daily: { firstMessage: "Let's go 🚀 aaj ka target kya hai?" },
+    motivation_study: { firstMessage: "Focus mode on 🎯 aaj kis subject ya kaam par dhyan dena hai?" },
+    motivation_success: { firstMessage: "Badi growth chhote disciplined steps se aati hai 📈 tumhara goal kya hai?" },
+    motivational_mental: { firstMessage: "Strong mind, stable life 🧘 aaj tum apne aap ko kaise better banana chahte ho?" },
+    auto_mood: { firstMessage: "Bas normal baat karo 🤖 main tumhare mood ko samajhne ki koshish karunga." },
+    free_chat: { firstMessage: "Jo dil me hai woh bolo 💬 main yaha hoon." }
+};
+
+const chatArea = document.getElementById("chatArea");
+
+// Database Message Loader
+function loadChatScreen() {
+    chatArea.innerHTML = "";
+    let history = [];
+    
+    try {
+        let stored = localStorage.getItem(chatHistoryKey);
+        if(stored) {
+            history = JSON.parse(stored);
+        }
+    } catch(e) {
+        console.error("History parse error", e);
+    }
+    
+    if(!Array.isArray(history) || history.length === 0){
+        const firstMsg = chatConfig[chatType]?.firstMessage || chatConfig["default"].firstMessage;
+        history = [{type: "ai", text: firstMsg}];
+        localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+    }
+    
+    history.forEach(msg => {
+        let div = document.createElement("div");
+        div.className = msg.type === "user" ? "userMsg" : "aiMsg";
+        div.innerText = msg.text;
+        chatArea.appendChild(div);
+    });
+    
+    setTimeout(() => {
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }, 50);
+}
+
+loadChatScreen();
+
+// Message Pipeline Dispatcher
+function sendMessage() {
+    let text = textarea.value.trim();
+    if(text === "") return;
+
+    let userDiv = document.createElement("div");
+    userDiv.className = "userMsg";
+    userDiv.innerText = text;
+    chatArea.appendChild(userDiv);
+
+    let history = JSON.parse(localStorage.getItem(chatHistoryKey)) || [];
+    history.push({type: "user", text: text});
+    localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+
+    textarea.value = "";
+    textarea.style.height = "auto";
+    chatArea.scrollTop = chatArea.scrollHeight;
+
+    let typingDiv = document.createElement("div");
+    typingDiv.className = "aiMsg";
+    typingDiv.innerText = "ManSaathi is Typing...";
+    chatArea.appendChild(typingDiv);
+    chatArea.scrollTop = chatArea.scrollHeight;
+
+    setTimeout(() => {
+        typingDiv.remove();
+        let aiText = "Main samajh raha hoon… agar chaho to aur share kar sakte ho.";
+        let aiDiv = document.createElement("div");
+        aiDiv.className = "aiMsg";
+        aiDiv.innerText = aiText;
+        chatArea.appendChild(aiDiv);
+
+        history.push({type: "ai", text: aiText});
+        localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+        
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }, 1200);
+}
+
+document.getElementById("sendBtnButton").onclick = sendMessage;
+textarea.addEventListener("keypress", function(e){
+    if(e.key === "Enter" && !e.shiftKey){
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+function goBack(){
+    localStorage.setItem("lastScreen", "mood");
+    window.location.href = "index.html";
+}
+
+function newChat() {
+    executeClearChat();
+}
+
+// Modal View Control Panels
+const clearModal = document.getElementById("clearModal");
+const menuBox = document.getElementById("menuBox");
+const menuBtn = document.getElementById("menuBtn");
+
+function openClearModal() {
+    menuBox.style.display = "none";
+    clearModal.style.display = "flex";
+}
+
+function closeClearModal() {
+    clearModal.style.display = "none";
+}
+
+function executeClearChat() {
+    try {
+        let history = JSON.parse(localStorage.getItem(chatHistoryKey)) || [];
+        if (history.length > 0) {
+            let firstMsgOnly = [history[0]];
+            localStorage.setItem(chatHistoryKey, JSON.stringify(firstMsgOnly));
+        }
+    } catch (err) {
+        console.error(err);
+    }
+    closeClearModal();
+    loadChatScreen();
+}
+
+// Navigation Dropdown Matrix
+menuBtn.onclick = (e) => {
+    e.stopPropagation();
+    menuBox.style.display = (menuBox.style.display === "block") ? "none" : "block";
+};
+
+document.addEventListener("click", (e) => {
+    if (!menuBtn.contains(e.target) && !menuBox.contains(e.target)) {
+        menuBox.style.display = "none";
+    }
+});
+</script>
+
+</body>
+</html>
