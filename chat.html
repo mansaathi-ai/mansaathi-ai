@@ -325,6 +325,36 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* TYPING KE WAQT BOX KO STABLE AUR LOCK RAKHNE KA FIX */
+@media screen and (max-width: 768px) {
+    .app-container {
+        position: relative !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        overflow: hidden !important;
+    }
+
+    /* Input container stable and locked at the absolute bottom */
+    .inputContainer {
+        position: fixed !important;
+        bottom: 0px !important;
+        left: 0 !important;
+        right: 0 !important;
+        margin: 0 !important;
+        padding: 8px 12px calc(8px + env(safe-area-inset-bottom)) 12px !important;
+        background: #0f172a !important;
+        z-index: 999 !important;
+        transition: bottom 0.12s ease-out !important; /* Smooth adjustment */
+    }
+
+    /* Chat scroll area constraint */
+    .chatArea {
+        height: calc(100vh - 120px) !important;
+        height: calc(100dvh - 120px) !important;
+        padding-bottom: 30px !important;
+        overflow-y: auto !important;
+    }
+}
     </style>
 </head>
 <body>
