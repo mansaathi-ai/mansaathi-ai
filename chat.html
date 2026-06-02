@@ -41,19 +41,20 @@
 
         /* BACK BUTTON */
         .backBtn {
-            position: absolute;
-            left: 20px;
-            top: 32px;
-            border-radius: 20px;
-            border: none;
-            background: rgba(255, 255, 255, 0.08);
-            color: white;
-            font-size: 14px;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            z-index: 11;
-        }
+    position: absolute !important;
+    left: 16px !important; /* Left side me perfectly fix */
+    top: 50% !important; /* Vertically center lane ke liye */
+    transform: translateY(-50%) !important; /* Perfect vertically centering trick */
+    border-radius: 20px;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    font-size: 14px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 11;
+}
 
         .backBtn:hover {
             background: rgba(255, 255, 255, 0.18);
