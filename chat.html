@@ -615,53 +615,36 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 </body>
-  <script>
-// WHATSAPP STYLE SCROLL AUTOMATION FIX
+<script>
 (function() {
     window.addEventListener('load', function() {
-        // Aapki chat area jahan saare messages scroll hote hain
-        const chatArea = document.getElementById("chatArea") || document.querySelector(".chatArea") || document.querySelector("[class*='chat']");
         const scrollBtn = document.getElementById("scrollToBottomBtn");
-        
-        if (chatArea && scrollBtn) {
-            // Shuruat me button ko bilkul hide rakho
-            scrollBtn.style.display = "none";
+        if (!scrollBtn) return;
 
-            // Jab user sach me messages ke andar scroll karega tabhi yeh chalega
-            chatArea.addEventListener("scroll", function() {
-                // Agar user niche se 200px se zyada upar uthega tabhi arrow dikhao
-                const totalHeight = chatArea.scrollHeight;
-                const visibleHeight = chatArea.clientHeight;
-                const currentScroll = chatArea.scrollTop;
+        scrollBtn.style.setProperty('display', 'none', 'important');
 
-                if (currentScroll < (totalHeight - visibleHeight - 200)) {
-                    scrollBtn.style.setProperty('display', 'flex', 'important');
-                } else {
-                    scrollBtn.style.setProperty('display', 'none', 'important');
+        document.addEventListener("scroll", function(e) {
+            const target = e.target === document ? (document.scrollingElement || document.documentElement) : e.target;
+            
+            if (target.scrollTop < (target.scrollHeight - target.clientHeight - 200)) {
+                scrollBtn.style.setProperty('display', 'flex', 'important');
+            } else {
+                scrollBtn.style.setProperty('display', 'none', 'important');
+            }
+        }, true);
+
+        scrollBtn.addEventListener("click", function() {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            document.querySelectorAll('div').forEach(div => {
+                if (div.scrollHeight > div.clientHeight) {
+                    div.scrollTo({ top: div.scrollHeight, behavior: 'smooth' });
                 }
             });
-
-            // Button click karne par ekdum niche smooth jhadka marega
-            scrollBtn.addEventListener("click", function() {
-                chatArea.scrollTo({ 
-                    top: chatArea.scrollHeight, 
-                    behavior: "smooth" 
-                });
-            });
-        } else {
-            // Agar chatArea nahi mila toh poori window screen par backup lagao
-            window.addEventListener("scroll", function() {
-                if (window.scrollY > 300) {
-                    scrollBtn.style.setProperty('display', 'flex', 'important');
-                } else {
-                    scrollBtn.style.setProperty('display', 'none', 'important');
-                }
-            });
-            scrollBtn.addEventListener("click", function() {
-                window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-            });
-        }
+        });
     });
 })();
-</script>  
+</script>
+
+</body>
+</html>
 </html>
