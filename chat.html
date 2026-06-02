@@ -597,7 +597,21 @@ document.addEventListener("click", (e) => {
         menuBox.style.display = "none";
     }
 });
+    // SEND BUTTON CLICK PAR KEYBOARD JUMP ROKNE KA FIX
+document.addEventListener("DOMContentLoaded", function() {
+    const sendBtn = document.querySelector(".sendBtn");
+    if (sendBtn) {
+        sendBtn.addEventListener("mousedown", function(event) {
+            event.preventDefault();
+        });
+        sendBtn.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            if (typeof sendMessage === "function") {
+                sendMessage();
+            }
+        });
+    }
+});
 </script>
-
 </body>
 </html>
