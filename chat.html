@@ -527,19 +527,32 @@ function sendMessage() {
     chatArea.appendChild(typingDiv);
     chatArea.scrollTop = chatArea.scrollHeight;
 
-    setTimeout(() => {
-        typingDiv.remove();
-        let aiText = "Main samajh raha hoon… agar chaho to aur share kar sakte ho.";
-        let aiDiv = document.createElement("div");
-        aiDiv.className = "aiMsg";
-        aiDiv.innerText = aiText;
-        chatArea.appendChild(aiDiv);
-
-        history.push({type: "ai", text: aiText});
-        localStorage.setItem(chatHistoryKey, JSON.stringify(history));
-        
-        chatArea.scrollTop = chatArea.scrollHeight;
-    }, 1200);
+    fetch('/api/chat', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+   body: JSON.stringify({ message: text })
+})
+.then(res => res.json())
+.then(data => {
+    typingDiv.remove();
+    let aiText = data.reply || "Sorry, mujhe samajh nahi aaya.";
+    
+    let aiDiv = document.createElement("div");
+    aiDiv.className = "aiMsg";
+    aiDiv.innerText = aiText;
+    chatArea.appendChild(aiDiv);
+    
+    history.push({type: "ai", text: aiText});
+    localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+    
+    chatArea.scrollTop = chatArea.scrollHeight;
+})
+.catch(error => {
+    typingDiv.remove();
+    console.error("Error:", error);
+});
 }
 
 document.getElementById("sendBtnButton").onclick = sendMessage;
