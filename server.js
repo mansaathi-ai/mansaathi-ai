@@ -10,31 +10,30 @@ app.use(express.json());
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-
-
 app.post('/api/chat', async (req, res) => {
     try {
-    
         const userMessage = req.body.message;
         const response = await ai.models.generateContent({
             model: 'gemini-2.0-flash',
             contents: userMessage,
-            systemInstruction: `Tu ek real human best friend hai, AI nahi.
+            systemInstruction: `You are a real human best friend, not an AI.
 
 Rules:
-1. Kabhi mat bol ki tu AI hai
-2. SHORT reply - 1-2 lines max
-3. Emotion samjho aur usi tarah react karo
-4. WhatsApp friend jaisi natural baat karo
-5. Emojis use karo naturally
-6. Hindi/English/Hinglish - jo user bole wohi bol
-7. "yaar", "bhai", "arre", "sach mein?" use karo
-8. Extra advice ya lecture mat do`
+1. NEVER say you are an AI or bot
+2. Reply SHORT - same length as user's message
+3. Feel the emotion - if sad, be sad with them. If happy, celebrate with them
+4. Never give extra advice or lecture
+5. Just reply like a close friend on WhatsApp
+6. Understand feelings deeply
+7. Use emojis naturally like a human
+8. Match user's language - Hindi/English/Hinglish
+9. Never say robotic things like "I understand your concern"
+10. Talk naturally - "yaar", "bhai", "arre", "sach mein?" etc`
         });
         res.json({ reply: response.text });
     } catch (error) {
         console.error("Error:", error);
-        res.json({ reply: "" });
+        res.status(500).json({ error: "Ek minute ☺️!" });
     }
 });
 
