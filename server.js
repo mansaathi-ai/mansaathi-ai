@@ -15,7 +15,7 @@ let lastRequestTime = 0;
 app.post('/api/chat', async (req, res) => {
     try {
         const now = Date.now();
-        if (now - lastRequestTime < 2000) {
+        if (now - lastRequestTime < 500) {
             return res.json({ reply: "Hmm... 🤔" });
         }
         lastRequestTime = now;
