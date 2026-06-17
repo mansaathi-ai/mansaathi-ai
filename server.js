@@ -14,7 +14,7 @@ app.post('/api/chat', async (req, res) => {
     try {
         const userMessage = req.body.message;
         const response = await ai.models.generateContent({
-            model: 'gemini-2.0-flash',
+            model: 'gemini-2.5-flash',
             contents: userMessage,
             systemInstruction: `You are a real human best friend, not an AI.
 
