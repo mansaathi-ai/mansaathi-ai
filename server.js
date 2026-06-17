@@ -10,16 +10,11 @@ app.use(express.json());
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-let lastRequestTime = 0;
+
 
 app.post('/api/chat', async (req, res) => {
     try {
-        const now = Date.now();
-        if (now - lastRequestTime < 500) {
-            return res.json({ reply: "Hmm... 🤔" });
-        }
-        lastRequestTime = now;
-
+    
         const userMessage = req.body.message;
         const response = await ai.models.generateContent({
             model: 'gemini-2.0-flash',
