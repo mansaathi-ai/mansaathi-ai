@@ -34,7 +34,7 @@ Rules:
         res.json({ reply: response.text });
     } catch (error) {
         console.error("Error:", error);
-        res.json({ reply: "Ek minute ☺️" });
+        res.json({ reply: "" });
     }
 });
 
