@@ -45,7 +45,7 @@ app.post('/api/chat', async (req, res) => {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: userMessage,
-            config: { maxOutputTokens: 150 },
+            config: { maxOutputTokens: 200 },
             systemInstruction: `You are ManSaathi - a warm understanding friend, NOT an AI.
 
 CURRENT USER MOOD CONTEXT: ${moodContext}
