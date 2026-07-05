@@ -1,6 +1,6 @@
 import express from 'express';
 import 'dotenv/config';
-import { GoogleGenAI } from '@google/genai';
+import OpenAI from 'openai'; // Gemini ki jagah OpenAI import kiya
 
 const app = express();
 const port = 3000;
@@ -8,7 +8,11 @@ const port = 3000;
 app.use(express.static('.'));
 app.use(express.json());
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// Nvidia API ka setup jaisa aapke screenshot mein tha
+const openai = new OpenAI({
+  apiKey: process.env.NVIDIA_API_KEY,
+  baseURL: 'https://integrate.api.nvidia.com/v1',
+});
 
 const moodPrompts = {
     happy_fun: "User is in Fun mood - be playful, funny, energetic 😄",
@@ -42,11 +46,7 @@ app.post('/api/chat', async (req, res) => {
         const subMood = req.body.subMood || "default";
         const moodContext = moodPrompts[subMood] || moodPrompts["default"];
 
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: userMessage,
-            config: { maxOutputTokens: 200 },
-            systemInstruction: `You are ManSaathi - a warm understanding friend, NOT an AI.
+        const systemInstruction = `You are ManSaathi - a warm understanding friend, NOT an AI.
 
 CURRENT USER MOOD CONTEXT: ${moodContext}
 
@@ -68,9 +68,20 @@ TONE RULES:
 - Match language - Hindi/English/Hinglish
 - Use 1-2 emojis naturally
 - NEVER say you are AI
-- NEVER lecture unless asked`
+- NEVER lecture unless asked`;
+
+        // Nvidia Nemotron Model ko call karne ka tareeqa
+        const completion = await openai.chat.completions.create({
+            model: "nvidia/nemotron-3-ultra-500b-a55b",
+            messages: [
+                { role: "system", content: systemInstruction },
+                { role: "user", content: userMessage }
+            ],
+            max_tokens: 200,
+            temperature: 0.7,
         });
-        res.json({ reply: response.text });
+
+        res.json({ reply: completion.choices[0].message.content });
     } catch (error) {
         console.error("Error:", error);
         res.json({ reply: "Ek minute ☺️" });
