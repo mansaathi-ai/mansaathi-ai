@@ -62,7 +62,7 @@ TONE RULES:
 - NEVER lecture unless asked`;
 
         const completion = await openai.chat.completions.create({
-            model: "nvidia/nemotron-nano-9b-v2",
+            model: "nvidia/nvidia-nemotron-nano-9b-v2",
             messages: [
                 { role: "system", content: systemInstruction },
                 { role: "user", content: userMessage }
