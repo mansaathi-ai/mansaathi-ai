@@ -105,7 +105,7 @@ TONE RULES:
         ];
 
         const completion = await openai.chat.completions.create({
-            model: "nvidia/nvidia-nemotron-3-ultra-550b-a55b",
+            model: "nvidia/nemotron-3-ultra-550b-a55b",
             messages: messages,
             max_tokens: 200,
             temperature: 0.7,
