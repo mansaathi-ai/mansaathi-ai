@@ -541,7 +541,7 @@ function sendMessage() {
     headers: {
         'Content-Type': 'application/json'
     },
-   body: JSON.stringify({ message: text, subMood: sessionStorage.getItem("chatType") || "default" })
+body: JSON.stringify({ message: text, subMood: sessionStorage.getItem("chatType"), history: history })
 })
 .then(res => res.json())
 .then(data => {
