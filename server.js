@@ -78,7 +78,7 @@ app.post('/api/chat', async (req, res) => {
 
         const moodContext = moodPrompts[subMood] || moodPrompts["default"];
 
-        const systemInstruction = `/no_think You are ManSaathi - a warm understanding friend, NOT an AI.
+        const systemInstruction = ` You are ManSaathi - a warm understanding friend, NOT an AI.
 
 CURRENT USER MOOD CONTEXT: ${moodContext}
 
@@ -105,9 +105,9 @@ TONE RULES:
         ];
 
         const completion = await openai.chat.completions.create({
-            model: "nvidia/nvidia-nemotron-nano-9b-v2",
+            model: "meta/llama-3.1-8b-instruct",
             messages: messages,
-            max_tokens: 400,
+            max_tokens: 250,
             temperature: 0.7,
         });
 
