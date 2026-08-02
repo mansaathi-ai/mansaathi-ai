@@ -185,7 +185,9 @@
 
         /* STICKY BOTTOM INPUT CONTAINER (FIXED FREEZE ISSUE) */
         .inputContainer {
-            position: sticky;
+ position: fixed;
+left: 0;
+right: 0;
             bottom: 0;
             margin-top: auto;
             padding: 12px 16px 20px 16px;
@@ -683,5 +685,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 })();
+if (window.visualViewport) {
+    const inputContainer = document.querySelector('.inputContainer');
+    window.visualViewport.addEventListener('resize', () => {
+        const keyboardHeight = window.innerHeight - window.visualViewport.height;
+        inputContainer.style.bottom = keyboardHeight > 0 ? keyboardHeight + 'px' : '0px';
+    });
+}
 </script>
 </html>
