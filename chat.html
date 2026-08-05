@@ -513,17 +513,27 @@ function loadChatScreen() {
 }
 
 loadChatScreen();
+let typingTimeout;
 textarea.addEventListener('input', () => {
     if (textarea.value.trim().length > 0) {
         if (!window.liveTypingDiv) {
             window.liveTypingDiv = document.createElement('div');
             window.liveTypingDiv.className = 'userMsg';
             window.liveTypingDiv.style.opacity = '0.5';
+            window.liveTypingDiv.innerText = 'typing...';
             chatArea.appendChild(window.liveTypingDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
         }
-        window.liveTypingDiv.innerText = textarea.value;
-        chatArea.scrollTop = chatArea.scrollHeight;
+        // Har baar type karte hi purana timer cancel karo, naya start karo
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+            if (window.liveTypingDiv) {
+                window.liveTypingDiv.remove();
+                window.liveTypingDiv = null;
+            }
+        }, 2000);
     } else {
+        clearTimeout(typingTimeout);
         if (window.liveTypingDiv) {
             window.liveTypingDiv.remove();
             window.liveTypingDiv = null;
