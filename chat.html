@@ -513,12 +513,28 @@ function loadChatScreen() {
 }
 
 loadChatScreen();
-
+textarea.addEventListener('input', () => {
+    if (textarea.value.trim().length > 0) {
+        if (!window.liveTypingDiv) {
+            window.liveTypingDiv = document.createElement('div');
+            window.liveTypingDiv.className = 'userMsg';
+            window.liveTypingDiv.style.opacity = '0.5';
+            chatArea.appendChild(window.liveTypingDiv);
+        }
+        window.liveTypingDiv.innerText = textarea.value;
+        chatArea.scrollTop = chatArea.scrollHeight;
+    } else {
+        if (window.liveTypingDiv) {
+            window.liveTypingDiv.remove();
+            window.liveTypingDiv = null;
+        }
+    }
+});
 // Message Pipeline Dispatcher
 function sendMessage() {
     let text = textarea.value.trim();
     if(text === "") return;
-
+if (window.liveTypingDiv) { window.liveTypingDiv.remove(); window.liveTypingDiv = null; }
     let userDiv = document.createElement("div");
     userDiv.className = "userMsg";
     userDiv.innerText = text;
