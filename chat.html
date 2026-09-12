@@ -51,9 +51,9 @@
         /* BACK BUTTON */
         .backBtn {
     position: absolute !important;
-    left: 12px !important; /* Left side me perfectly fix */
-    top: 50% !important; /* Vertically center lane ke liye */
-    transform: translateY(-50%) !important; /* Perfect vertically centering trick */
+    left: 12px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
     border-radius: 20px;
     border: none;
     background: rgba(255, 255, 255, 0.08);
@@ -181,6 +181,22 @@
             border-radius: 16px 16px 4px 16px;
             align-self: flex-end;
             font-weight: 500;
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        /* READ RECEIPTS */
+        .receipt {
+            font-size: 12px;
+            opacity: 0.7;
+            flex-shrink: 0;
+        }
+
+        .receipt.read {
+            color: #0f172a;
+            opacity: 1;
+            font-weight: bold;
         }
 
         /* STICKY BOTTOM INPUT CONTAINER (FIXED FREEZE ISSUE) */
@@ -374,6 +390,24 @@ right: 0;
         box-shadow: none !important; /* Kisi bhi tarah ka ajeeb shadow hatane ke liye */
     }
 }
+
+.scroll-down-btn {
+    position: fixed !important;
+    right: 20px !important;
+    bottom: 110px !important;
+    width: 42px !important;
+    height: 42px !important;
+    background-color: #202c33 !important;
+    color: #00a884 !important;
+    border: none !important;
+    border-radius: 50% !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.4) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    z-index: 99 !important;
+}
     </style>
 </head>
 <body>
@@ -409,6 +443,12 @@ right: 0;
         </div>
     </div>
 </div>
+
+<button id="scrollToBottomBtn" class="scroll-down-btn" style="display: none;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+        <path d="M12 15.25a.74.74 0 0 1-.53-.22l-5-5a.75.75 0 0 1 1.06-1.06L12 13.44l4.47-4.47a.75.75 0 1 1 1.06 1.06l-5 5a.74.74 0 0 1-.53.22z"/>
+    </svg>
+</button>
 
 <script>
 // Subtitle Text Typer Effect Engine
@@ -455,13 +495,13 @@ let chatHistoryKey = `chatHistory_${chatType}`;
 const chatConfig = {
     default: { firstMessage: "Hey 👋 main yaha hoon. Aaj tum kaise feel kar rahe ho?" },
     happy_fun: { firstMessage: "Hey 😄 aaj thoda fun karte hain. Tum kya dekhna ya baat karna chahte ho?" },
-    happy_affirm: { firstMessage: "Aaj positivity ko aur strong banate hain ✨ ek achchi si baat share karo." },
+    happy_affirm: { firstMessage: "Aaj positivity ko aur strong banate hain ✨ ek achhi si baat share karo." },
     happy_energy: { firstMessage: "Awesome ⚡ chalo aaj energy ko action me badalte hain. Kya karna chahte ho?" },
     happy_music: { firstMessage: "Nice 🎵 aaj ka mood musical hai. Tumhe kis type ka music pasand hai?" },
     sad_relax: { firstMessage: "Main yaha hoon 🤍 pehle aaram se saans lo. Kya tum thoda share karna chahoge?" },
     sad_healing: { firstMessage: "Koi baat nahi, aaram se bolo 🌿 jo feel ho raha hai, main sun raha hoon." },
     sad_calm: { firstMessage: "Chalo thoda calm hote hain 🎶 tumhe abhi sabse zyada kis cheez ki zarurat lag rahi hai?" },
-    sad_quotes: { firstMessage: "Kabhi kabhi ek achchi line bhi dil ko halka kar deti hai 📝 tum kya feel kar rahe ho?" },
+    sad_quotes: { firstMessage: "Kabhi kabhi ek achhi line bhi dil ko halka kar deti hai 📝 tum kya feel kar rahe ho?" },
     love_quotes: { firstMessage: "Love is in the air ❤️ kya tum romantic quotes chahte ho ya kisi special ke liye message?" },
     love_guidance: { firstMessage: "Chalo relationship ko better banane ki baat karte hain 🤝 kya confusion hai?" },
     love_confidence: { firstMessage: "Confidence attractive hoti hai 🔥 tum kis situation me confident banna chahte ho?" },
@@ -474,7 +514,7 @@ const chatConfig = {
     motivation_study: { firstMessage: "Focus mode on 🎯 aaj kis subject ya kaam par dhyan dena hai?" },
     motivation_success: { firstMessage: "Badi growth chhote disciplined steps se aati hai 📈 tumhara goal kya hai?" },
     motivational_mental: { firstMessage: "Strong mind, stable life 🧘 aaj tum apne aap ko kaise better banana chahte ho?" },
-    auto_mood: { firstMessage: "Bas normal baat karo 🤖 main tumhare mood ko samajhne ki koshish karunga." },
+    auto_mood: { firstMessage: "Bas normal baat karo 🤖 main tumhare mood ko samjhne ki koshish karunga." },
     free_chat: { firstMessage: "Jo dil me hai woh bolo 💬 main yaha hoon." }
 };
 
@@ -504,6 +544,14 @@ function loadChatScreen() {
         let div = document.createElement("div");
         div.className = msg.type === "user" ? "userMsg" : "aiMsg";
         div.innerText = msg.text;
+        
+        if (msg.type === "user" && msg.receipt) {
+            let receipt = document.createElement("span");
+            receipt.className = "receipt" + (msg.receipt === "read" ? " read" : "");
+            receipt.innerText = msg.receipt === "read" ? "✓✓" : "✓✓";
+            div.appendChild(receipt);
+        }
+        
         chatArea.appendChild(div);
     });
     
@@ -524,14 +572,13 @@ textarea.addEventListener('input', () => {
             chatArea.appendChild(window.liveTypingDiv);
             chatArea.scrollTop = chatArea.scrollHeight;
         }
-        // Har baar type karte hi purana timer cancel karo, naya start karo
         clearTimeout(typingTimeout);
         typingTimeout = setTimeout(() => {
             if (window.liveTypingDiv) {
                 window.liveTypingDiv.remove();
                 window.liveTypingDiv = null;
             }
-        }, 3000);
+        }, 2000);
     } else {
         clearTimeout(typingTimeout);
         if (window.liveTypingDiv) {
@@ -540,6 +587,7 @@ textarea.addEventListener('input', () => {
         }
     }
 });
+
 // Message Pipeline Dispatcher
 function sendMessage() {
     let text = textarea.value.trim();
@@ -548,15 +596,35 @@ if (window.liveTypingDiv) { window.liveTypingDiv.remove(); window.liveTypingDiv 
     let userDiv = document.createElement("div");
     userDiv.className = "userMsg";
     userDiv.innerText = text;
-    chatArea.appendChild(userDiv);
+    
+    // ADD READ RECEIPTS
+    let receipt = document.createElement("span");
+    receipt.className = "receipt";
+    receipt.innerText = "✓";
+    userDiv.appendChild(receipt);
 
     let history = JSON.parse(localStorage.getItem(chatHistoryKey)) || [];
-    history.push({type: "user", text: text});
+    history.push({type: "user", text: text, receipt: "sent"});
     localStorage.setItem(chatHistoryKey, JSON.stringify(history));
 
+    chatArea.appendChild(userDiv);
     textarea.value = "";
     textarea.style.height = "auto";
     chatArea.scrollTop = chatArea.scrollHeight;
+
+    // Delivered after 0.5s
+    setTimeout(() => {
+        if (receipt) receipt.innerText = "✓✓";
+    }, 500);
+
+    // Read after 1.5s
+    setTimeout(() => {
+        if (receipt) {
+            receipt.classList.add("read");
+        }
+        history[history.length - 1].receipt = "read";
+        localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+    }, 1500);
 
     let typingDiv = document.createElement("div");
     typingDiv.className = "aiMsg";
@@ -648,6 +716,7 @@ document.addEventListener("click", (e) => {
         menuBox.style.display = "none";
     }
 });
+
     // SEND BUTTON CLICK PAR KEYBOARD JUMP ROKNE KA FIX
 document.addEventListener("DOMContentLoaded", function() {
     const sendBtn = document.querySelector(".sendBtn");
@@ -663,36 +732,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
-</script>
-</body>
-<button id="scrollToBottomBtn" class="scroll-down-btn" style="display: none;">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-        <path d="M12 15.25a.74.74 0 0 1-.53-.22l-5-5a.75.75 0 0 1 1.06-1.06L12 13.44l4.47-4.47a.75.75 0 1 1 1.06 1.06l-5 5a.74.74 0 0 1-.53.22z"/>
-    </svg>
-</button>
 
-<style>
-.scroll-down-btn {
-    position: fixed !important;
-    right: 20px !important;
-    bottom: 110px !important;
-    width: 42px !important;
-    height: 42px !important;
-    background-color: #202c33 !important;
-    color: #00a884 !important;
-    border: none !important;
-    border-radius: 50% !important;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.4) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    z-index: 99 !important;
-}
-</style>
-
-<script>
-// Scroll karne par button auto show/hide karne ke liye
+// Scroll to bottom functionality
 (function() {
     window.addEventListener('load', function() {
         const chatArea = document.querySelector(".chatArea");
@@ -711,6 +752,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 })();
+
 if (window.visualViewport) {
     const inputContainer = document.querySelector('.inputContainer');
     window.visualViewport.addEventListener('resize', () => {
@@ -719,4 +761,5 @@ if (window.visualViewport) {
     });
 }
 </script>
+</body>
 </html>
