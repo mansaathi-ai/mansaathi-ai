@@ -34,6 +34,13 @@
             flex-direction: column;
             background: linear-gradient(135deg, #0f172a, #1e293b);
         }
+        textarea {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+    -webkit-appearance: none;
+    appearance: none;
+}
 
         /* PREMIUM GLASSMORPHIC HEADER */
         .header {
@@ -42,6 +49,9 @@
             padding: 16px;
             padding-top: 35px;
             flex-shrink: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 10;
         }
 
@@ -369,7 +379,7 @@ right: 0;
         padding: 8px 12px calc(8px + env(safe-area-inset-bottom)) 12px !important;
         background: #0f172a !important;
         z-index: 999 !important;
-        transition: bottom 0.12s ease-out !important;
+        transition: bottom 0.12s ease-out !important; /* Smooth adjustment */
     }
 
     /* Chat scroll area constraint */
@@ -379,13 +389,12 @@ right: 0;
         padding-bottom: 120px !important;
         overflow-y: auto !important;
     }
-}
-
+}/* SEND BOX KE NICHE KA BLACK BACKGROUND HATANE KA FIX */
 @media screen and (max-width: 768px) {
     .inputContainer {
-        background: transparent !important;
+        background: transparent !important; /* Black strip ko bilkul gayab karne ke liye */
         background-color: transparent !important;
-        box-shadow: none !important;
+        box-shadow: none !important; /* Kisi bhi tarah ka ajeeb shadow hatane ke liye */
     }
 }
 
@@ -408,7 +417,7 @@ right: 0;
 }
     </style>
 </head>
-<body class="dark-mode">
+<body>
 
 <div id="clearModal" class="modalOverlay">
     <div class="modalBox">
@@ -449,25 +458,6 @@ right: 0;
 </button>
 
 <script>
-// DARK MODE TOGGLE
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-    document.body.classList.toggle('light-mode');
-    const btn = document.getElementById('modeToggle');
-    btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-    localStorage.setItem('mansaathiMode', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-}
-
-// Initialize mode from localStorage
-window.addEventListener('DOMContentLoaded', () => {
-    const savedMode = localStorage.getItem('mansaathiMode');
-    if (savedMode === 'light') {
-        document.body.classList.remove('dark-mode');
-        document.body.classList.add('light-mode');
-        document.getElementById('modeToggle').textContent = '🌙';
-    }
-});
-
 // Subtitle Text Typer Effect Engine
 const texts = [
     "Share what you feel. I'm here to listen.",
@@ -624,4 +614,16 @@ if (window.liveTypingDiv) { window.liveTypingDiv.remove(); window.liveTypingDiv 
     history.push({type: "user", text: text, receipt: "sent"});
     localStorage.setItem(chatHistoryKey, JSON.stringify(history));
 
-    chatArea.ap
+    chatArea.appendChild(userDiv);
+    textarea.value = "";
+    textarea.style.height = "auto";
+    chatArea.scrollTop = chatArea.scrollHeight;
+
+    // Delivered after 0.5s
+    setTimeout(() => {
+        if (receipt) receipt.innerText = "✓✓";
+    }, 500);
+
+    // Read after 1.5s
+    setTimeout(() => {
+        if
