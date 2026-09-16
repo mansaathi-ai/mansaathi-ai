@@ -34,6 +34,13 @@
             flex-direction: column;
             background: linear-gradient(135deg, #0f172a, #1e293b);
         }
+        textarea {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+    -webkit-appearance: none;
+    appearance: none;
+}
 
         /* PREMIUM GLASSMORPHIC HEADER */
         .header {
@@ -760,6 +767,29 @@ if (window.visualViewport) {
         inputContainer.style.bottom = keyboardHeight > 0 ? keyboardHeight + 'px' : '0px';
     });
 }
+// FIX FOR MOBILE KEYBOARD NOT OPENING
+textarea.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    textarea.focus();
+});
+
+textarea.addEventListener('click', (e) => {
+    textarea.focus();
+});
+
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        textarea.focus();
+    }, 100);
+});
+
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        textarea.focus();
+    }
+});
 </script>
+
 </body>
+
 </html>
