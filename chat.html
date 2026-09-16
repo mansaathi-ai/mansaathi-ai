@@ -34,13 +34,7 @@
             flex-direction: column;
             background: linear-gradient(135deg, #0f172a, #1e293b);
         }
-        textarea {
-    -webkit-user-select: text;
-    user-select: text;
-    -webkit-touch-callout: default;
-    -webkit-appearance: none;
-    appearance: none;
-}
+        
 
         /* PREMIUM GLASSMORPHIC HEADER */
         .header {
@@ -445,7 +439,7 @@ right: 0;
 <div class="inputContainer">
     <div class="chatBox">
         <div class="inputArea">
-            <textarea id="userInput" placeholder="Type your message..." spellcheck="false" autofocus inputmode="text"></textarea>
+            <textarea id="userInput" placeholder="Type your message..." spellcheck="false"></textarea>
             <button class="sendBtn" id="sendBtnButton">➤</button>
         </div>
     </div>
@@ -626,4 +620,150 @@ if (window.liveTypingDiv) { window.liveTypingDiv.remove(); window.liveTypingDiv 
 
     // Read after 1.5s
     setTimeout(() => {
-        if
+        if (receipt) {
+            receipt.classList.add("read");
+        }
+        history[history.length - 1].receipt = "read";
+        localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+    }, 1500);
+
+    let typingDiv = document.createElement("div");
+    typingDiv.className = "aiMsg";
+    typingDiv.innerText = "ManSaathi is Typing...";
+    chatArea.appendChild(typingDiv);
+    chatArea.scrollTop = chatArea.scrollHeight;
+
+    fetch('/api/chat', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+body: JSON.stringify({ message: text, subMood: sessionStorage.getItem("chatType"), history: history })
+})
+.then(res => res.json())
+.then(data => {
+    typingDiv.remove();
+    let aiText = data.reply || "Sorry, mujhe samajh nahi aaya.";
+    
+    let aiDiv = document.createElement("div");
+    aiDiv.className = "aiMsg";
+    aiDiv.innerText = aiText;
+    chatArea.appendChild(aiDiv);
+    
+    history.push({type: "ai", text: aiText});
+    localStorage.setItem(chatHistoryKey, JSON.stringify(history));
+    
+    chatArea.scrollTop = chatArea.scrollHeight;
+})
+.catch(error => {
+    typingDiv.remove();
+    console.error("Error:", error);
+});
+}
+
+document.getElementById("sendBtnButton").onclick = sendMessage;
+textarea.addEventListener("keypress", function(e){
+    if(e.key === "Enter" && !e.shiftKey){
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+function goBack(){
+    localStorage.setItem("lastScreen", "mood");
+    window.location.href = "index.html";
+}
+
+function newChat() {
+    executeClearChat();
+}
+
+// Modal View Control Panels
+const clearModal = document.getElementById("clearModal");
+const menuBox = document.getElementById("menuBox");
+const menuBtn = document.getElementById("menuBtn");
+
+function openClearModal() {
+    menuBox.style.display = "none";
+    clearModal.style.display = "flex";
+}
+
+function closeClearModal() {
+    clearModal.style.display = "none";
+}
+
+function executeClearChat() {
+    try {
+        let history = JSON.parse(localStorage.getItem(chatHistoryKey)) || [];
+        if (history.length > 0) {
+            let firstMsgOnly = [history[0]];
+            localStorage.setItem(chatHistoryKey, JSON.stringify(firstMsgOnly));
+        }
+    } catch (err) {
+        console.error(err);
+    }
+    closeClearModal();
+    loadChatScreen();
+}
+
+// Navigation Dropdown Matrix
+menuBtn.onclick = (e) => {
+    e.stopPropagation();
+    menuBox.style.display = (menuBox.style.display === "block") ? "none" : "block";
+};
+
+document.addEventListener("click", (e) => {
+    if (!menuBtn.contains(e.target) && !menuBox.contains(e.target)) {
+        menuBox.style.display = "none";
+    }
+});
+
+    // SEND BUTTON CLICK PAR KEYBOARD JUMP ROKNE KA FIX
+document.addEventListener("DOMContentLoaded", function() {
+    const sendBtn = document.querySelector(".sendBtn");
+    if (sendBtn) {
+        sendBtn.addEventListener("mousedown", function(event) {
+            event.preventDefault();
+        });
+        sendBtn.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            if (typeof sendMessage === "function") {
+                sendMessage();
+            }
+        });
+    }
+});
+
+// Scroll to bottom functionality
+(function() {
+    window.addEventListener('load', function() {
+        const chatArea = document.querySelector(".chatArea");
+        const scrollBtn = document.getElementById("scrollToBottomBtn");
+        if (chatArea && scrollBtn) {
+            chatArea.addEventListener("scroll", function() {
+                if (chatArea.scrollTop < (chatArea.scrollHeight - chatArea.clientHeight - 300)) {
+                    scrollBtn.style.display = "flex";
+                } else {
+                    scrollBtn.style.display = "none";
+                }
+            });
+            scrollBtn.addEventListener("click", function() {
+                chatArea.scrollTo({ top: chatArea.scrollHeight, behavior: "smooth" });
+            });
+        }
+    });
+})();
+
+if (window.visualViewport) {
+    const inputContainer = document.querySelector('.inputContainer');
+    window.visualViewport.addEventListener('resize', () => {
+        const keyboardHeight = window.innerHeight - window.visualViewport.height;
+        inputContainer.style.bottom = keyboardHeight > 0 ? keyboardHeight + 'px' : '0px';
+    });
+}
+
+</script>
+
+</body>
+
+</html>
